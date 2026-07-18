@@ -138,3 +138,5 @@ LOGIN_URL = 'login'
 
 LOGIN_REDIRECT_URL = 'aller_a_mon_espace'
 LOGOUT_REDIRECT_URL = '/'
+
+STATIC_ROOT = BASE_DIR / 'staticfiles'
