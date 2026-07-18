@@ -22,3 +22,11 @@ def ajouter_commentaire(request, article_id):
         form = CommentaireForm()
 
     return render(request, 'commentaires/ajouter_commentaire.html', {'form': form, 'article': article})
+def espace_collaboration_views(request):
+    commentaires_recents = Commentaire.objects.select_related('auteur', 'article').order_by('-pk') [:20]
+    
+    contexte = {
+        'commentaires': commentaires_recents
+    }
+    
+    return render(request, 'commentaires/espace_collaboration.html', contexte)

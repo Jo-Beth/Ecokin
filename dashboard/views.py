@@ -15,6 +15,7 @@ def accueil_view(request):
         'utilisateur': request.user,
         'form': form,
         'show_login_card': False,
+        'afficher_hero': True,
     }
 
     return render(request, "dashboard/accueil.html", contexte)

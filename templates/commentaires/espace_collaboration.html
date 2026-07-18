@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="collaboration-container">
+    <h2>🤝 Espace d'Échange et Collaboration</h2>
+    <p>Retrouvez ici les dernières discussions en cours.</p>
+
+    <div class="feed">
+        {% for com in commentaires %}
+            <div class="comment-card" style="border: 1px solid #ddd; padding: 15px; margin-bottom: 15px; border-radius: 8px;">
+                <div class="card-header">
+                    <!-- On affiche l'auteur et son rôle (Autorité, ONG, École...) -->
+                    <strong>{{ com.auteur.username }}</strong> 
+                    <span class="badge">{{ com.auteur.role }}</span>
+                </div>
+                <div class="card-body">
+                    <p>" {{ com.texte }} "</p>
+                </div>
+                <div class="card-footer">
+                    <span>Sur la ressource : <strong>{{ com.article.titre }}</strong></span>
+                    <!-- Lien direct pour rejoindre la discussion -->
+                    <a href="{% url 'detail_article' article_id=com.article.id %}" class="btn-link">Rejoindre la discussion →</a>
+                </div>
+            </div>
+        {% empty %}
+            <p>Aucun échange pour le moment.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
