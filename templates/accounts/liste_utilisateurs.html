@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Listes des utilisateurs</h2>
+
+<table border="1">
+    <tr>
+        <th>Nom</th>
+        <th>Email</th>
+        <th>Téléphone</th>
+        <th>Role</th>
+    </tr>
+
+    {% for utilisateur in utilisateurs%}
+    <tr>
+        <td>{{ utilisateur.username }}</td>
+        <td>{{ utilisateur.email }}</td>
+        <td>{{ utilisateur.telephone }}</td>
+        <td>{{ utilisateur.role }}</td>
+        <td>
+            <a href="{% url 'supprimer_utilisateur' utilisateur.id %}"
+            onclick="return confirm('Ête-vous sûr de vouloir supprimer cet utilisateur ?');">Supprimer</a>
+                
+    </tr>
+    {% endfor %}
+
+</table>
+
+{% endblock %}

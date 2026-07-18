@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="grid-2">
+    <div class="card">
+        <span class="pill">🛡️ Tableau de bord des autorités</span>
+        <h3>Bienvenue dans votre espace</h3>
+        <p>Suivez l’état des signalements environnementaux et coordonnez rapidement les actions de terrain.</p>
+        <a href="{% url 'liste_autorite' %}" class="btn">Voir tous les signalements</a>
+    </div>
+
+    <div class="card">
+        <h3>État des interventions</h3>
+        <div class="metric-list">
+            <div class="metric-row"><span>En attente</span><strong>{{ en_attente }}</strong></div>
+            <div class="metric-row"><span>En cours</span><strong>{{ en_cours }}</strong></div>
+            <div class="metric-row"><span>Résolus</span><strong>{{ resolus }}</strong></div>
+            <div class="metric-row"><span>Rejetés</span><strong>{{ rejetes }}</strong></div>
+        </div>
+    </div>
+</div>
+
+<div class="card" style="margin-top: 16px;">
+    <h3>Informations du compte</h3>
+    <div class="metric-list">
+        <div class="metric-row"><span>Nom</span><strong>{{ request.user.username }}</strong></div>
+        <div class="metric-row"><span>Date de création</span><strong>{{ request.user.date_joined|date:"d/m/Y H:i" }}</strong></div>
+        <div class="metric-row"><span>Rôle</span><strong>{{ request.user.get_role_display }}</strong></div>
+    </div>
+</div>
+
+<div class="dashboard-grid" style="margin-top: 16px;">
+    <div class="card">
+        <h3>Signalements totaux</h3>
+        <div class="stat-value">{{ total_signalements }}</div>
+    </div>
+    <div class="card">
+        <h3>Priorité environnementale</h3>
+        <div class="stat-value">Élevée</div>
+    </div>
+    <div class="card">
+        <h3>Actions prévues</h3>
+        <div class="stat-value">12</div>
+    </div>
+</div>
+
+<div class="card" style="margin-top: 16px;">
+    <h3>Analyse IA des signalements</h3>
+    {% if analyses_ia %}
+    <div class="metric-list">
+        {% for analyse in analyses_ia %}
+        <div class="metric-row">
+            <span>{{ analyse.titre }}</span>
+            <strong>{{ analyse.categorie }} • {{ analyse.priorite }}</strong>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p>Aucune analyse IA disponible pour le moment.</p>
+    {% endif %}
+</div>
+
+<div class="card table-card">
+    <h3>Derniers signalements</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Titre</th>
+                <th>Auteur</th>
+                <th>Statut</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for signalement in signalements %}
+            <tr>
+                <td>{{ signalement.titre }}</td>
+                <td>{{ signalement.utilisateur.username }}</td>
+                <td>{{ signalement.get_statut_display }}</td>
+                <td><a href="{% url 'traiter' signalement.pk %}">Traiter</a></td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="4">Aucun signalement disponible.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

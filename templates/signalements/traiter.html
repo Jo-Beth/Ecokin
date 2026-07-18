@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Traiter le signalement</h1>
+
+<p> {{ signalement.titre }}</p>
+<form method="POST">
+    {%  csrf_token %}
+
+    <select name="statut">
+        <option value="en_attente">
+            En attente
+        </option>
+            
+        <option value="en_cours">
+            En cours
+        </option>
+
+        <option value="resolu">
+            Résolus
+        </option>
+
+        <option value="rejete">
+            Réjété
+        </option>
+
+    </select>
+
+        <button type="submit">
+            Mettre à jour
+        </button>
+
+</form>
+
+
+
+
+
+
+{% endblock %}

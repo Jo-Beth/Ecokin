@@ -1,0 +1,12 @@
+<h2>Supprimer le signalments</h2>
+
+<p> Voulez-vous vraiment supprimer ce signalements ?</p>
+
+<form method="POST">
+    {%  csrf_token %}
+
+    <button type="submit">Supprimer</button>
+
+</form>
+
+<a href="{% url 'detail_signalements' signalements.id %}">Annuler</a>

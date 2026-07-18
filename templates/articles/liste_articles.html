@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card" style="margin-bottom: 16px;">
+    <span class="pill">📚 Ressources collaboratives</span>
+    <h3>Ressources, guides, livres et publications</h3>
+    <p>Une bibliothèque partagée pour les autorités, ONG, écoles et entreprises engagées dans la transition environnementale.</p>
+    <div style="margin-top: 12px;">
+        <a href="{% url 'creer_article' %}" class="btn">Publier une ressource</a>
+        <a href="{% url 'gestion_ressources' %}" class="btn secondary">Gérer mes ressources</a>
+    </div>
+</div>
+
+<div class="card" style="margin-bottom: 16px;">
+    <form method="get" class="grid-2">
+        <div>
+            <label for="type_ressource">Type</label>
+            <select id="type_ressource" name="type_ressource" class="form-control">
+                <option value="">Tous</option>
+                <option value="guide" {% if type_ressource == 'guide' %}selected{% endif %}>Guide</option>
+                <option value="livre" {% if type_ressource == 'livre' %}selected{% endif %}>Livre</option>
+                <option value="publication" {% if type_ressource == 'publication' %}selected{% endif %}>Publication</option>
+                <option value="ressource" {% if type_ressource == 'ressource' %}selected{% endif %}>Ressource</option>
+            </select>
+        </div>
+        <div>
+            <label for="acteur">Acteur</label>
+            <select id="acteur" name="acteur" class="form-control">
+                <option value="">Tous</option>
+                <option value="autorite" {% if acteur == 'autorite' %}selected{% endif %}>Autorité</option>
+                <option value="ong" {% if acteur == 'ong' %}selected{% endif %}>ONG</option>
+                <option value="ecole" {% if acteur == 'ecole' %}selected{% endif %}>École</option>
+                <option value="entreprise" {% if acteur == 'entreprise' %}selected{% endif %}>Entreprise</option>
+            </select>
+        </div>
+        <div>
+            <label for="categorie">Catégorie</label>
+            <select id="categorie" name="categorie" class="form-control">
+                <option value="">Toutes</option>
+                {% for category in categories %}
+                <option value="{{ category.slug }}" {% if categorie == category.slug %}selected{% endif %}>{{ category.nom }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div style="grid-column: 1 / -1;">
+            <button type="submit" class="btn">Filtrer</button>
+        </div>
+    </form>
+</div>
+
+<div class="dashboard-grid">
+    {% for article in articles %}
+    <div class="card">
+        <span class="pill">{{ article.get_type_ressource_display }}</span>
+        <h3>{{ article.titre }}</h3>
+        <p>{{ article.sous_titre|default:'Ressource partagée sur Écokin' }}</p>
+        <p><strong>Acteur :</strong> {{ article.get_acteur_display }}</p>
+        <p><strong>Catégories :</strong> {% for category in article.categories.all %}{{ category.nom }}{% if not forloop.last %}, {% endif %}{% empty %}Aucune{% endfor %}</p>
+        <p><strong>Publié par :</strong> {{ article.auteur.username }}</p>
+        <p><strong>Date :</strong> {{ article.date_creation|date:'d/m/Y' }}</p>
+        <a href="{% url 'detail_article' article.pk %}" class="btn secondary">Consulter</a>
+    </div>
+    {% empty %}
+    <div class="card">
+        <p>Aucune ressource publiée pour le moment.</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content%}
+<h1>Listes des signalements</h2>
+    {% for signalement in signalements %}
+    <h3>{{ signalement.titre }}</h3>
+    <p>{{ signalement.description  }}</p>
+    <p> Créé par : {{ signalement.utilisateur.username }}</p>
+    <p>Statut :{{ signalement.statut }}</p>
+
+
+
+<form method="POST" action="{% url 'changer_statut' signalement.pk %}">
+    <select name="statut">
+        <option value="en_attente">En attente </option>
+        <option value="en_cours">En cours</option>
+        <option value="resolu">Résolu</option>
+        <option value="rejete">Réjété</option>
+    <hr>  
+    {% empty %}
+        <p>Aucun signalements disponible.</p>
+          
+    {% endfor %}
+
+{% endblock %}

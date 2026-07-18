@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card" style="max-width: 700px; margin: 0 auto;">
+    <h3>Ajouter un commentaire</h3>
+    <p>Participez à la discussion autour de la ressource : <strong>{{ article.titre }}</strong></p>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn">Publier</button>
+    </form>
+</div>
+{% endblock %}

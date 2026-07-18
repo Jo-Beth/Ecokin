@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="dashboard-grid">
+    <div class="card">
+        <h3>Utilisateurs</h3>
+        <div class="stat-value">{{ nombre_utilisateurs }}</div>
+    </div>
+    <div class="card">
+        <h3>Citoyens</h3>
+        <div class="stat-value">{{ nombre_citoyens }}</div>
+    </div>
+    <div class="card">
+        <h3>Autorités</h3>
+        <div class="stat-value">{{ nombre_autorités }}</div>
+    </div>
+    <div class="card">
+        <h3>ONG</h3>
+        <div class="stat-value">{{ nombre_ong }}</div>
+    </div>
+</div>
+
+<div class="card" style="margin-top: 16px;">
+    <h3>Informations du compte</h3>
+    <div class="metric-list">
+        <div class="metric-row"><span>Nom</span><strong>{{ request.user.username }}</strong></div>
+        <div class="metric-row"><span>Date de création</span><strong>{{ request.user.date_joined|date:"d/m/Y H:i" }}</strong></div>
+        <div class="metric-row"><span>Rôle</span><strong>{{ request.user.get_role_display }}</strong></div>
+    </div>
+</div>
+
+<div class="card table-card">
+    <h3>Gestion des utilisateurs</h3>
+    <table>
+        <tr>
+            <th>Nom</th>
+            <th>Email</th>
+            <th>Rôle</th>
+            <th>Action</th>
+        </tr>
+        {% for utilisateur in utilisateurs %}
+        <tr>
+            <td>{{ utilisateur.username }}</td>
+            <td>{{ utilisateur.email }}</td>
+            <td>{{ utilisateur.get_role_display }}</td>
+            <td><a href="{% url 'changer_role' utilisateur.pk %}">Changer le rôle</a></td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="4">Aucun utilisateur enregistré.</td></tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends 'base.html'%}
+
+{% block content %}
+
+<h1>Titre : {{ signalements.titre }}</h1>
+
+<p>Auteur : {{signalements.utilisateur.username }}</p>
+    
+<p> Description : {{ signalements.description}}</p>
+
+<p>Statut : {{ signalements.statut}} </p>
+   
+<p>Date : {{ signalements.date_creation }}</p>
+    
+{% if signalements.photo %}
+<img src="{{ signalements.photo.url }}" width="400">
+{% endif %}
+
+<hr>
+
+{% if peut_modifier %}
+
+<a href="{% url 'modifier_signalements' signalements.pk %}">
+    Modifier
+</a>
+{% endif %}
+
+<hr>
+
+{% if peut_supprimer %}
+
+<a href="{% url 'supprimer_signalements' signalements.pk %}">
+    Supprimer
+</a>
+{% endif %}
+<hr>
+
+<a href="{% url 'liste' %}">
+    Retour à la liste
+</a>
+
+
+
+{% if request.user.changer_statut %}
+<a href="{% url 'changer_statut' signalements.pk %}">
+    Mettre en cours
+</a>
+
+{% endif %}
+
+{% if request.user.changer_statut %}
+<a href="{% url 'changer_statut' signalements.pk %}">
+    Marquer comme resolu
+</a>
+
+{% endif %}
+
+{% if request.user.peut_changer_etat %}
+<a href="{% url 'changer_statut' signalements.pk %}">
+    Afficher le rejet
+</a>
+
+{% endif %}
+
+{% endblock%}

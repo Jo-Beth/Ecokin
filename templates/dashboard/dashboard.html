@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="dashboard-grid">
+    <div class="card">
+        <span class="pill">🌿 Vue d’ensemble</span>
+        <h3>Bienvenue sur Écokin</h3>
+        <p>Accédez à votre tableau de bord selon votre profil : citoyen, autorité, ONG ou administrateur.</p>
+        {% if user.is_authenticated %}
+            <a href="{% url 'aller_a_mon_espace' %}" class="btn">Voir mon tableau de bord</a>
+        {% else %}
+            <a href="{% url 'login' %}" class="btn">Connexion</a>
+            <a href="{% url 'inscription' %}" class="btn secondary">Inscription</a>
+        {% endif %}
+    </div>
+
+    <div class="card">
+        <h3>Objectifs du programme</h3>
+        <div class="metric-list">
+            <div class="metric-row"><span>Réduction des déchets</span><strong>+24%</strong></div>
+            <div class="metric-row"><span>Signalements traités</span><strong>+18%</strong></div>
+            <div class="metric-row"><span>Communautés engagées</span><strong>+32%</strong></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>Indicateurs clés</h3>
+        <div class="metric-list">
+            <div class="metric-row"><span>Propreté urbaine</span><strong>Très bon</strong></div>
+            <div class="metric-row"><span>Suivi des incidents</span><strong>Actif</strong></div>
+            <div class="metric-row"><span>Actions citoyennes</span><strong>En hausse</strong></div>
+        </div>
+    </div>
+</div>
+
+<div class="dashboard-grid" style="margin-top: 8px;">
+    <div class="card">
+        <h3>Statistiques environnementales</h3>
+        <div class="metric-list">
+            <div class="metric-row"><span>Zones suivies</span><strong>128</strong></div>
+            <div class="metric-row"><span>Problèmes résolus</span><strong>74</strong></div>
+            <div class="metric-row"><span>Alertes actives</span><strong>21</strong></div>
+        </div>
+    </div>
+    <div class="card">
+        <h3>Actions rapides</h3>
+        <a href="{% url 'creer' %}" class="btn">Nouveau signalement</a>
+        <a href="{% url 'carte_signalements' %}" class="btn secondary">Voir la carte</a>
+    </div>
+</div>
+
+{% if not user.is_authenticated %}
+<div class="card" style="margin-top: 16px; max-width: 680px;">
+    <h3>Vous n’êtes pas encore inscrit ?</h3>
+    <p>Créez votre compte pour signaler des problèmes environnementaux, suivre vos interventions et mieux collaborer avec nous.</p>
+    <a href="{% url 'inscription' %}" class="btn">S’inscrire maintenant</a>
+</div>
+{% endif %}
+
+{% if show_login_card %}
+<div class="card" style="margin-top: 16px; max-width: 480px;">
+    <h3>Connexion rapide</h3>
+    <p>Connectez-vous directement pour accéder à votre tableau de bord.</p>
+    <form method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn">Se connecter</button>
+    </form>
+</div>
+{% endif %}
+{% endblock %}

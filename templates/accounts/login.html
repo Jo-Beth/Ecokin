@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card" style="max-width: 540px; margin: 0 auto;">
+    <span class="pill">🔐 Connexion</span>
+    <h3>Accédez à votre espace Écokin</h3>
+    <p>Connectez-vous pour suivre vos signalements et consulter votre tableau de bord.</p>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn">Se connecter</button>
+    </form>
+
+    {% if form.errors %}
+        <div class="notice">Votre nom d’utilisateur ou votre mot de passe est incorrect.</div>
+    {% endif %}
+
+    <p style="margin-top: 12px;">
+        Vous n’avez pas encore de compte ?
+        <a href="{% url 'inscription' %}">Créer un compte</a>
+    </p>
+</div>
+{% endblock %}

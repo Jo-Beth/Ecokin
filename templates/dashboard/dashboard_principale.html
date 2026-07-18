@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="welcome-container" style="
+
+    display: flex;
+    padding: 12px 14px;
+    background-color: #4f46e5;
+    color: white;
+    text-decoration: none;
+    border-radius: 5
+">
+
+    <div class="welcome-box" style="text-align: center; margin-top: 30px; padding: 20px; background-color: #f3f4f6; border-radius: 12px; max-width: 500px; box-shadow: 0 4px 6px -1px; rgba(0, 0, 0, 0.1);">
+        <h2 style="color: #1f2937; margin-bottom: 10px;">Bonjour et bienvenue sue Ecokin !</h2>
+        <p style="color: #4b5563; margin-bottom: 30px;">La plateforme pour suivre et agir sur votre environnement.</p>
+
+        <div style="margin-top: 20px;">
+            
+            <!-- Si la personne est connectée, on l'envoie sur son espace account -->
+            <a href="{% url 'accounts/login'%}" style="
+                display: inline-block;
+                padding: 12px 14px;
+                background-color: #4f46e5;
+                color: white;
+                text-decoration: none;
+                border-radius: 5px;
+                font-weight: bold;
+                    ">
+                    Se connecter
+            </a>
+            
+
+                
+            <p style="color: #6b7280; font-size: 0.95rem; margin: 0;">
+                vous n'êtes pas encore connecté ?
+            <a href="/accounts/register/" style="
+                display: inline-block;
+                padding: 12px 14px;
+                background-color: #10b981;
+                color: white;
+                text-decoration: none;
+                border-radius: 5px;
+                font-weight: bold;
+                ">
+                    S'inscire 
+            </a>
+            </p>
+            
+
+        </div>
+    </div>
+{% endblock %}
+

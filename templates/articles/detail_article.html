@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card">
+    <span class="pill">{{ article.get_type_ressource_display }}</span>
+    <h3>{{ article.titre }}</h3>
+    <p><strong>{{ article.sous_titre }}</strong></p>
+    <p><strong>Acteur :</strong> {{ article.get_acteur_display }} | <strong>Catégories :</strong> {% for category in article.categories.all %}{{ category.nom }}{% if not forloop.last %}, {% endif %}{% empty %}Aucune{% endfor %} | <strong>Publié par :</strong> {{ article.auteur.username }} | <strong>Date :</strong> {{ article.date_creation|date:'d/m/Y' }}</p>
+    <div style="margin: 20px 0; line-height: 1.7;">{{ article.contenu|linebreaks }}</div>
+    {% if article.fichier %}
+    <a href="{{ article.fichier.url }}" class="btn" target="_blank">Télécharger le fichier</a>
+    {% endif %}
+    <div style="margin-top: 20px;">
+        <a href="{% url 'ajouter_commentaire' article.pk %}" class="btn secondary">Ajouter un commentaire</a>
+    </div>
+</div>
+
+<div class="card" style="margin-top: 16px;">
+    <h3>Commentaires et échanges</h3>
+    {% for commentaire in article.commentaires.all %}
+    <div class="notice">
+        <strong>{{ commentaire.auteur.username }}</strong>
+        <p>{{ commentaire.contenu }}</p>
+        <small>{{ commentaire.date_creation|date:'d/m/Y H:i' }}</small>
+    </div>
+    {% empty %}
+    <p>Aucun commentaire pour le moment. Soyez le premier à contribuer.</p>
+    {% endfor %}
+</div>
+{% endblock %}

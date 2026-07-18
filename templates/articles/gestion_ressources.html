@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card" style="margin-bottom: 16px;">
+    <span class="pill">🛠️ Espace de gestion</span>
+    <h3>Gérez vos ressources et vos publications</h3>
+    <p>Publiez, consultez et organisez vos documents autour des catégories de votre réseau.</p>
+    <div style="margin-top: 12px;">
+        <a href="{% url 'creer_article' %}" class="btn">Publier une nouvelle ressource</a>
+    </div>
+</div>
+
+<div class="card" style="margin-bottom: 16px;">
+    <h3>Catégories disponibles</h3>
+    <div class="metric-list">
+        {% for category in categories %}
+        <div class="metric-row"><span>{{ category.nom }}</span><strong>{{ category.articles.count }}</strong></div>
+        {% empty %}
+        <p>Aucune catégorie disponible.</p>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="card">
+    <h3>Mes ressources publiées</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Titre</th>
+                <th>Type</th>
+                <th>Catégories</th>
+                <th>Statut</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for article in articles %}
+            <tr>
+                <td>{{ article.titre }}</td>
+                <td>{{ article.get_type_ressource_display }}</td>
+                <td>{% for category in article.categories.all %}{{ category.nom }}{% if not forloop.last %}, {% endif %}{% empty %}Aucune{% endfor %}</td>
+                <td>{% if article.est_publie %}Publié{% else %}Brouillon{% endif %}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="4">Aucune ressource publiée pour le moment.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

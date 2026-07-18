@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Mes signalements</h1>
+    {% if signalements %}
+        {% for signalement in signalements %}
+            <div>
+                <h3>Titre : {{ signalement.titre}}</h3>
+                <p> Description : {{ signalement.description}}</p>
+                <p> Date de création : {{ signalement.date_creation}}</p>
+
+                <p> Photo : 
+                    {% if signalement.photo %}
+                        <br>
+                        <img src="{{  signalement.photo.url }}" alt="photo du : {{ signalement.titre}}">
+                    {% else %}
+                        <span>Aucune photo fournie</span>
+                    {% endif %}    
+                    
+                </p>
+                <hr>
+                <p>Statut : {{ signalement.statut}}</p>
+                <hr>
+                <a href="{% url 'modifier_signalements' signalement.pk%}">Modifier</a>
+                <hr>
+                <a href="{% url 'supprimer_signalements' signalement.pk%}">Supprimer</a> 
+            </div> 
+        {% endfor %}
+
+        {% else %}
+            <p>Vous n'avez aucun signalements</p>
+    {% endif%}
+        
+                
+
+{% endblock %}

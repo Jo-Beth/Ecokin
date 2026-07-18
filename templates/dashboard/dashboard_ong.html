@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="grid-2">
+    <div class="card">
+        <span class="pill">🌍 Espace ONG</span>
+        <h3>Analyse et suivi environnemental</h3>
+        <p>Consultez les signalements, identifiez les zones sensibles et soutenez les actions de terrain.</p>
+        <a href="{% url 'espace_ong' %}" class="btn">Voir les signalements suivis</a>
+    </div>
+
+    <div class="card">
+        <h3>Vue synthétique</h3>
+        <div class="metric-list">
+            <div class="metric-row"><span>Signalements actifs</span><strong>{{ total_signalements }}</strong></div>
+            <div class="metric-row"><span>En attente</span><strong>{{ en_attente }}</strong></div>
+            <div class="metric-row"><span>En cours</span><strong>{{ en_cours }}</strong></div>
+            <div class="metric-row"><span>Résolus</span><strong>{{ resolus }}</strong></div>
+        </div>
+    </div>
+</div>
+
+<div class="card" style="margin-top: 16px;">
+    <h3>Informations du compte</h3>
+    <div class="metric-list">
+        <div class="metric-row"><span>Nom</span><strong>{{ request.user.username }}</strong></div>
+        <div class="metric-row"><span>Date de création</span><strong>{{ request.user.date_joined|date:"d/m/Y H:i" }}</strong></div>
+        <div class="metric-row"><span>Rôle</span><strong>{{ request.user.get_role_display }}</strong></div>
+    </div>
+</div>
+
+<div class="card table-card" style="margin-top: 16px;">
+    <h3>Derniers signalements</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Titre</th>
+                <th>Statut</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for signalement in signalements %}
+            <tr>
+                <td>{{ signalement.titre }}</td>
+                <td>{{ signalement.get_statut_display }}</td>
+                <td>{{ signalement.date_creation }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="3">Aucun signalement disponible.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

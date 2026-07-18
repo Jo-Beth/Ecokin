@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="grid-2">
+    <div class="card">
+        <span class="pill">🌱 Mon impact citoyen</span>
+        <h3>Bienvenue dans votre espace</h3>
+        <p>Votre espace vous permet de suivre vos signalements et d’agir concrètement pour la qualité de vie dans votre commune.</p>
+        <div style="margin-top: 12px;">
+            <a href="{% url 'creer' %}" class="btn">Créer un signalement</a>
+            <a href="{% url 'liste' %}" class="btn secondary">Voir mes signalements</a>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>Notifications 🔔</h3>
+        <p>{{ notifications_non_lues }} non lues</p>
+        {% for notification in notifications %}
+            <div class="notice">
+                {{ notification.message }}
+                {% if not notification.lu %}
+                    <br><a href="{% url 'lire' notification.pk %}">Marquer comme lu</a>
+                {% endif %}
+            </div>
+        {% empty %}
+            <p>Aucune notification pour le moment.</p>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="card" style="margin-top: 16px;">
+    <h3>Informations du compte</h3>
+    <div class="metric-list">
+        <div class="metric-row"><span>Nom</span><strong>{{ request.user.username }}</strong></div>
+        <div class="metric-row"><span>Date de création</span><strong>{{ request.user.date_joined|date:"d/m/Y H:i" }}</strong></div>
+        <div class="metric-row"><span>Rôle</span><strong>{{ request.user.get_role_display }}</strong></div>
+    </div>
+</div>
+
+<div class="dashboard-grid" style="margin-top: 16px;">
+    <div class="card">
+        <h3>Total signalements</h3>
+        <div class="stat-value">{{ total_signalements }}</div>
+    </div>
+    <div class="card">
+        <h3>En attente</h3>
+        <div class="stat-value">{{ en_attente }}</div>
+    </div>
+    <div class="card">
+        <h3>En cours</h3>
+        <div class="stat-value">{{ en_cours }}</div>
+    </div>
+    <div class="card">
+        <h3>Résolus</h3>
+        <div class="stat-value">{{ resolus }}</div>
+    </div>
+    <div class="card">
+        <h3>Rejetés</h3>
+        <div class="stat-value">{{ rejetes }}</div>
+    </div>
+</div>
+
+<div class="card">
+    <h3>Suivi environnemental</h3>
+    <svg width="100%" height="180" viewBox="0 0 420 180" xmlns="http://www.w3.org/2000/svg">
+        <rect x="20" y="20" width="380" height="140" rx="16" fill="#f4fcf8"></rect>
+        <line x1="40" y1="140" x2="380" y2="140" stroke="#9ccdb7" stroke-width="2"></line>
+        <rect x="60" y="90" width="40" height="50" rx="6" fill="#36b37e"></rect>
+        <rect x="140" y="70" width="40" height="70" rx="6" fill="#1f7a5b"></rect>
+        <rect x="220" y="55" width="40" height="85" rx="6" fill="#114b3d"></rect>
+        <rect x="300" y="80" width="40" height="60" rx="6" fill="#36b37e"></rect>
+    </svg>
+</div>
+{% endblock %}

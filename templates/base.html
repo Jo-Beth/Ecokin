@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Écokin | Environnement et citoyenneté</title>
+        <style>
+            :root {
+                --green-900: #114b3d;
+                --green-700: #1f7a5b;
+                --green-500: #36b37e;
+                --green-100: #eaf8f1;
+                --text: #163126;
+                --muted: #5f786d;
+                --card: #ffffff;
+                --shadow: 0 16px 35px rgba(17, 75, 61, 0.12);
+            }
+            * { box-sizing: border-box; }
+            body {
+                margin: 0;
+                font-family: "Segoe UI", Arial, sans-serif;
+                color: var(--text);
+                background: linear-gradient(135deg, #f4fcf8 0%, #eaf8f1 100%);
+            }
+            a { text-decoration: none; color: inherit; }
+            body {
+                margin: 0;
+                font-family: "Segoe UI", Arial, sans-serif;
+                color: var(--text);
+                background: linear-gradient(135deg, #f4fcf8 0%, #eaf8f1 100%);
+            }
+            .app-shell {
+                display: grid;
+                grid-template-columns: 280px 1fr;
+                min-height: 100vh;
+            }
+            .sidebar {
+                background: linear-gradient(180deg, var(--green-900), var(--green-700));
+                color: white;
+                padding: 24px 18px;
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+            }
+            .brand {
+                font-weight: 800;
+                font-size: 1.3rem;
+                color: white;
+            }
+            .sidebar-nav { display: grid; gap: 8px; }
+            .sidebar-nav a {
+                padding: 11px 12px;
+                border-radius: 12px;
+                color: rgba(255,255,255,0.92);
+                font-weight: 600;
+                transition: all 0.2s ease;
+            }
+            .sidebar-nav a:hover {
+                background: rgba(255,255,255,0.16);
+                transform: translateX(2px);
+            }
+            .main-panel {
+                display: flex;
+                flex-direction: column;
+            }
+            .topbar {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 18px 24px;
+                background: rgba(255,255,255,0.88);
+                backdrop-filter: blur(12px);
+                border-bottom: 1px solid rgba(17,75,61,0.08);
+                position: sticky;
+                top: 0;
+                z-index: 20;
+            }
+            .nav-links { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+            .nav-links a {
+                color: var(--muted);
+                font-weight: 600;
+                padding: 8px 12px;
+                border-radius: 999px;
+                transition: all 0.2s ease;
+            }
+            .nav-links a:hover {
+                color: var(--green-700);
+                background: var(--green-100);
+                transform: translateY(-1px);
+            }
+            .mobile-toggle { display: none; }
+            .page-shell { max-width: 1240px; margin: 0 auto; padding: 24px; width: 100%; }
+            .hero {
+                background: linear-gradient(135deg, var(--green-900), var(--green-700));
+                color: white;
+                padding: 32px;
+                border-radius: 24px;
+                display: grid;
+                grid-template-columns: 1.4fr 0.9fr;
+                gap: 24px;
+                box-shadow: var(--shadow);
+                margin-bottom: 24px;
+            }
+            .hero h1 { font-size: 2rem; margin: 8px 0 12px; }
+            .hero p { line-height: 1.6; color: rgba(255,255,255,0.9); }
+            .eyebrow {
+                display: inline-block;
+                padding: 6px 10px;
+                border-radius: 999px;
+                background: rgba(255,255,255,0.16);
+                font-size: 0.85rem;
+                text-transform: uppercase;
+                letter-spacing: 0.08em;
+            }
+            .hero-card {
+                background: rgba(255,255,255,0.15);
+                border: 1px solid rgba(255,255,255,0.2);
+                border-radius: 18px;
+                padding: 18px;
+            }
+            .hero-card ul { padding-left: 18px; line-height: 1.8; }
+            .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 24px; }
+            .card { background: var(--card); border-radius: 18px; padding: 20px; box-shadow: var(--shadow); }
+            .card h3, .card h4 { margin-top: 0; color: var(--green-900); }
+            .stat-value { font-size: 1.7rem; font-weight: 800; color: var(--green-700); }
+            .metric-list { display: grid; gap: 10px; }
+            .metric-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #e7f2ec; }
+            .chip { display: inline-block; padding: 6px 10px; border-radius: 999px; background: var(--green-100); color: var(--green-700); font-size: 0.85rem; font-weight: 700; }
+            .btn { display: inline-block; padding: 10px 14px; border-radius: 999px; background: var(--green-500); color: white; font-weight: 700; margin-right: 8px; margin-top: 8px; transition: all 0.2s ease; box-shadow: 0 8px 18px rgba(54, 179, 126, 0.18); }
+            .btn:hover { transform: translateY(-1px); box-shadow: 0 10px 20px rgba(54, 179, 126, 0.24); }
+            .btn.secondary { background: white; color: var(--green-700); border: 1px solid #dcefe6; box-shadow: none; }
+            .btn.secondary:hover { background: #f5fcf8; }
+            .table-card { overflow-x: auto; }
+            table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+            th, td { padding: 12px; text-align: left; border-bottom: 1px solid #e8f3eb; }
+            th { color: var(--green-700); font-size: 0.92rem; text-transform: uppercase; letter-spacing: 0.04em; }
+            .notice { padding: 12px 14px; border-radius: 12px; background: #f5fff9; border: 1px solid #d8f3e2; margin-top: 10px; }
+            .grid-2 { display: grid; grid-template-columns: 1.3fr 0.9fr; gap: 16px; }
+            .pill { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; background: var(--green-100); color: var(--green-700); border-radius: 999px; font-size: 0.9rem; font-weight: 700; }
+            .site-footer {
+                margin-top: 32px;
+                padding: 32px 24px 24px;
+                color: #4b655b;
+                background: linear-gradient(180deg, #f7fcf9 0%, #eef8f2 100%);
+                border-top: 1px solid rgba(17,75,61,0.12);
+            }
+            .footer-grid {
+                max-width: 1240px;
+                margin: 0 auto;
+                display: grid;
+                grid-template-columns: 1.2fr 0.8fr 0.8fr;
+                gap: 28px;
+                align-items: start;
+            }
+            .brand-footer {
+                font-weight: 800;
+                font-size: 1.05rem;
+                color: var(--green-900);
+                margin-bottom: 8px;
+                text-transform: uppercase;
+                letter-spacing: 0.08em;
+            }
+            .site-footer h4 {
+                margin: 0 0 10px;
+                color: var(--green-900);
+                font-size: 0.95rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.06em;
+            }
+            .site-footer p {
+                margin: 0 0 8px;
+                line-height: 1.7;
+                font-size: 0.95rem;
+            }
+            .footer-links {
+                display: grid;
+                gap: 8px;
+            }
+            .footer-links a {
+                color: var(--green-700);
+                font-weight: 600;
+            }
+            .footer-links a:hover {
+                color: var(--green-900);
+            }
+            .footer-bottom {
+                max-width: 1240px;
+                margin: 20px auto 0;
+                padding: 16px 18px 0;
+                border-top: 1px solid rgba(17,75,61,0.12);
+                font-size: 0.92rem;
+                text-align: center;
+                color: #6a7d74;
+                font-weight: 600;
+                letter-spacing: 0.02em;
+            }
+            @media (max-width: 900px) {
+                .app-shell { grid-template-columns: 1fr; }
+                .sidebar { display: none; }
+                .hero, .grid-2 { grid-template-columns: 1fr; }
+                .mobile-toggle { display: inline-block; }
+                .topbar { flex-wrap: wrap; gap: 10px; }
+                .nav-links {
+                    width: 100%;
+                    justify-content: flex-start;
+                    display: none;
+                }
+                .nav-links.open { display: flex; flex-direction: column; align-items: flex-start; padding-top: 6px; }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="app-shell">
+            <aside class="sidebar">
+                <a class="brand" href="/">Écokin</a>
+                <div class="sidebar-nav">
+                    <a href="{% url 'accueil' %}">🏠 Accueil</a>
+                    <a href="{% url 'creer' %}">📍 Signaler un problème</a>
+                    <a href="/signalements/">🧾 Mes signalements</a>
+                    <a href="{% url 'carte_signalements' %}">🗺️ Carte des signalements</a>
+                    <a href="{% url 'liste_articles' %}">📚 Ressources</a>
+                    <a href="{% url 'liste_articles' %}" class="btn" style="margin:0; padding:8px 12px;">🤝 Collaborer</a>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'gestion_ressources' %}">🛠️ Gestion des ressources</a>
+                        <a href="{% url 'dashboard' %}">📊 Tableau de bord</a>
+                    {% endif %}
+                </div>
+            </aside>
+
+            <div class="main-panel">
+                <nav class="topbar">
+                    <div style="font-weight:700; color:var(--green-900);">Plateforme citoyenne pour l’environnement</div>
+                    <div class="nav-links" id="nav-links">
+                        <a href="{% url 'accueil' %}">Accueil</a>
+                        <a href="{% url 'creer' %}">Signaler</a>
+                        <a href="{% url 'carte_signalements' %}">Carte</a>
+                        <a href="{% url 'liste_articles' %}">Ressources</a>
+                        <a href="{% url 'liste_articles' %}" class="btn" style="margin:0; padding:8px 12px;">Collaborer</a>
+                        {% if user.is_authenticated %}
+                            <a href="{% url 'gestion_ressources' %}">Gestion</a>
+                            <a href="{% url 'dashboard' %}">Tableau de bord</a>
+                            <a href="{% url 'logout' %}" class="btn secondary" style="margin:0; padding:8px 12px;">Déconnexion</a>
+                        {% else %}
+                            <a href="{% url 'login' %}" class="btn secondary" style="margin:0; padding:8px 12px;">Connexion</a>
+                            <a href="{% url 'inscription' %}" class="btn" style="margin:0; padding:8px 12px;">Inscription</a>
+                        {% endif %}
+                    </div>
+                    <a href="#" class="mobile-toggle btn secondary" style="margin:0; padding:8px 12px;" onclick="event.preventDefault(); document.getElementById('nav-links').classList.toggle('open');">Menu</a>
+                </nav>
+
+                <main class="page-shell">
+                    {% block hero %}
+                    <section class="hero">
+                        <div>
+                            <span class="eyebrow">Plateforme citoyenne pour la transition verte</span>
+                            <h1>Chaque signalement peut devenir une action pour la nature.</h1>
+                            <p>Écokin réunit les citoyens, les autorités et les ONG autour du suivi des problèmes environnementaux pour bâtir des communautés plus propres et plus résilientes.</p>
+                        </div>
+                        <div class="hero-card">
+                            <strong>Ce que vous pouvez faire</strong>
+                            <ul>
+                                <li>Signaler une pollution, un déchet ou un risque</li>
+                                <li>Suivre l’évolution des actions menées</li>
+                                <li>Participer à un avenir plus durable</li>
+                            </ul>
+                        </div>
+                    </section>
+                    {% endblock %}
+
+                    {% block content %}
+                    {% endblock %}
+                </main>
+
+                <footer class="site-footer">
+                    <div class="footer-grid">
+                        <div>
+                            <div class="brand-footer">Écokin</div>
+                            <p>Plateforme de gestion collaborative des enjeux environnementaux, conçue pour connecter les citoyens, les institutions et les partenaires autour d’actions concrètes.</p>
+                        </div>
+                        <div>
+                            <h4>Navigation</h4>
+                            <div class="footer-links">
+                                <a href="{% url 'accueil' %}">Accueil</a>
+                                <a href="{% url 'creer' %}">Signalement</a>
+                                <a href="{% url 'carte_signalements' %}">Carte</a>
+                                <a href="{% url 'liste_articles' %}">Ressources</a>
+                            </div>
+                        </div>
+                        <div>
+                            <h4>Engagement</h4>
+                            <p>Favoriser une gouvernance plus transparente, plus réactive et plus responsable pour les territoires.</p>
+                            <a href="{% url 'inscription' %}" class="btn secondary" style="margin: 8px 0 0;">Créer un compte</a>
+                        </div>
+                    </div>
+                    <div class="footer-bottom">
+                        {% block footer_copyright %}
+                        Copyright © 2026 Joseph Mutuala. All rights reserved. | Écokin — Solutions numériques pour un environnement durable.
+                        {% endblock %}
+                    </div>
+                </footer>
+            </div>
+        </div>
+    </body>
+</html>
