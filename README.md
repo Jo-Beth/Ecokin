@@ -43,4 +43,4 @@ Développé par *Jo-Beth*
 3.  Les emojis + sections pour que ça rende bien sur Github
 4.  Lien du site local
 
-Tu veux que je t'ajoute aussi une section "Captures d'écran" et "Contribution" ?
+
