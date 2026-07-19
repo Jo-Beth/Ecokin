@@ -60,7 +60,7 @@ def modifier_signalements(request, pk):
     
     else:
         form = SignalementsForm(instance=signalements)
-    return render(request, "signalements/modifier_signalements.html", {"form":form})
+    return render(request, "signalements/modifier_signalements.html", {"form":form, "signalements": signalements})
     
 def supprimer_signalements(request, pk):
     signalements = get_object_or_404(Signalements, pk=pk)

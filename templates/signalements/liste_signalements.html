@@ -4,11 +4,13 @@
     <h1>Mes signalements</h1>
     {% if signalements %}
         {% for signalement in signalements %}
-            <div>
-                <h3>Titre : {{ signalement.titre}}</h3>
+            <div class="card" style="margin-bottom: 16px; background: #f5fff9; border: 1px solid #d8f3e2;">
+                <h2>Titre : {{ signalement.titre}}</h2>
+                <hr>
                 <p> Description : {{ signalement.description}}</p>
+                <hr>
                 <p> Date de création : {{ signalement.date_creation}}</p>
-
+                <hr>
                 <p> Photo : 
                     {% if signalement.photo %}
                         <br>
@@ -21,9 +23,12 @@
                 <hr>
                 <p>Statut : {{ signalement.statut}}</p>
                 <hr>
-                <a href="{% url 'modifier_signalements' signalement.pk%}">Modifier</a>
+                <a href="{% url 'modifier_signalements' signalement.pk%}"class="btn btn-secondary">📄 Modifier</a>
                 <hr>
-                <a href="{% url 'supprimer_signalements' signalement.pk%}">Supprimer</a> 
+                <a href="{% url 'supprimer_signalements' signalement.pk%}"class="btn btn-secondary">✖  Supprimer</a> 
+                <hr>
+                
+                <a href="{% url 'accueil' %}"class="btn btn-secondary" >📊 Retour à la page d'accueil</a>
             </div> 
         {% endfor %}
 
@@ -31,6 +36,6 @@
             <p>Vous n'avez aucun signalements</p>
     {% endif%}
         
-                
+
 
 {% endblock %}

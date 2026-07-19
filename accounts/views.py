@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from .form import InscriptionForm
-from django.contrib.auth import authenticate ,login 
+from django.contrib.auth import authenticate ,login,logout
 from django.contrib.auth.forms import AuthenticationForm
 from .models import Utilisateur
 from django.contrib.auth.decorators import login_required
@@ -8,7 +8,7 @@ from signalements.models import Signalements
 from django.http import HttpResponseForbidden
 from notifications.models import Notifications
 # Create your views here.
-@login_required
+
 def inscription(request):
     if request.method == "POST":
         form = InscriptionForm(request.POST, request.FILES)
@@ -106,7 +106,9 @@ def changer_role(request, pk):
     
     return render(request, "accounts/changer_role.html", {"utilisateur": utilisateur})
 
-
+def logout_views(request):
+    logout(request)
+    return redirect("accueil")
 
 
     
