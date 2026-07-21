@@ -20,7 +20,7 @@ def accueil_view(request):
 
     return render(request, "dashboard/accueil.html", contexte)
 
-
+@login_required
 def dashboard_views(request):
     """Redirige vers le tableau de bord adapté selon le rôle de l’utilisateur."""
     if request.user.is_authenticated:

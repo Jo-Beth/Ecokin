@@ -5,7 +5,7 @@ from categories.models import Category
 from .forms import ArticleForm
 from .models import Article
 
-
+@login_required
 def liste_articles(request):
     """Affiche les ressources publiées et permet de les filtrer par type, acteur et catégorie."""
     articles = Article.objects.filter(est_publie=True)
@@ -31,7 +31,7 @@ def liste_articles(request):
         'categories': categories,
     })
 
-
+@login_required
 def detail_article(request, pk):
     """Affiche le détail d'une ressource publiée avec ses commentaires associés."""
     article = get_object_or_404(Article, pk=pk, est_publie=True)

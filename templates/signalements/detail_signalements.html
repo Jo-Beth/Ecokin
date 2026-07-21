@@ -1,65 +1,65 @@
 {% extends 'base.html'%}
 
 {% block content %}
+ <div class="card" style="max-widht: 650px; margin: 20px auto; padding: 0 15px; background: #f5fff9; border: 1px solid #d8f3e2;">
+    <h1>Titre : {{ signalements.titre }}</h1>
 
-<h1>Titre : {{ signalements.titre }}</h1>
+    <p>Auteur : {{signalements.utilisateur.username }}</p>
+        
+    <p> Description : {{ signalements.description}}</p>
 
-<p>Auteur : {{signalements.utilisateur.username }}</p>
+    <p>Statut : {{ signalements.statut}} </p>
     
-<p> Description : {{ signalements.description}}</p>
+    <p>Date : {{ signalements.date_creation }}</p>
+        
+    {% if signalements.photo %}
+    <img src="{{ signalements.photo.url }}" width="400">
+    {% endif %}
 
-<p>Statut : {{ signalements.statut}} </p>
-   
-<p>Date : {{ signalements.date_creation }}</p>
-    
-{% if signalements.photo %}
-<img src="{{ signalements.photo.url }}" width="400">
-{% endif %}
+    <hr>
 
-<hr>
+    {% if peut_modifier %}
 
-{% if peut_modifier %}
+    <a href="{% url 'modifier_signalements' signalements.pk %} "class="btn btn-secondary">
+       📄 Modifier
+    </a>
+    {% endif %}
 
-<a href="{% url 'modifier_signalements' signalements.pk %}">
-    Modifier
-</a>
-{% endif %}
+    <hr>
 
-<hr>
+    {% if peut_supprimer %}
 
-{% if peut_supprimer %}
+    <a href="{% url 'supprimer_signalements' signalements.pk %}" class="btn btn-secondary">
+       ✖ Supprimer
+    </a>
+    {% endif %}
+    <hr>
 
-<a href="{% url 'supprimer_signalements' signalements.pk %}">
-    Supprimer
-</a>
-{% endif %}
-<hr>
-
-<a href="{% url 'liste' %}">
-    Retour à la liste
-</a>
+    <a href="{% url 'liste' %} "class="btn btn-secondary"  ">
+        🧾 Retour à la liste
+    </a>
 
 
 
-{% if request.user.changer_statut %}
-<a href="{% url 'changer_statut' signalements.pk %}">
-    Mettre en cours
-</a>
+    {% if request.user.changer_statut %}
+    <a href="{% url 'changer_statut' signalements.pk %} "class="btn btn-secondary">
+        Mettre en cours
+    </a>
 
-{% endif %}
+    {% endif %}
 
-{% if request.user.changer_statut %}
-<a href="{% url 'changer_statut' signalements.pk %}">
-    Marquer comme resolu
-</a>
+    {% if request.user.changer_statut %}
+    <a href="{% url 'changer_statut' signalements.pk %}" class="btn btn-secondary">
+        Marquer comme resolu
+    </a>
 
-{% endif %}
+    {% endif %}
 
-{% if request.user.peut_changer_etat %}
-<a href="{% url 'changer_statut' signalements.pk %}">
-    Afficher le rejet
-</a>
-
+    {% if request.user.peut_changer_statut %}
+    <a href="{% url 'changer_statut' signalements.pk %}" class="btn btn-secondary">
+        Afficher le rejet
+    </a>
+</div> 
 {% endif %}
 
 {% endblock%}

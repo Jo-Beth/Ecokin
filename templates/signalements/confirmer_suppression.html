@@ -1,12 +1,21 @@
-<h2>Supprimer le signalments</h2>
+{% extends 'base.html'%}
 
-<p> Voulez-vous vraiment supprimer ce signalements ?</p>
+{% block content %}
+<div class="card" style="max-width: 760px; margin: 0 auto;">
+    <h2>Supprimer le signalments</h2>
 
-<form method="POST">
-    {%  csrf_token %}
+    <p> Voulez-vous vraiment supprimer ce signalements ?</p>
 
-    <button type="submit">Supprimer</button>
+    <form method="POST">
+        {%  csrf_token %}
 
-</form>
+        <button type="submit" class="btn btn-secondary">Supprimer</button>
+        <a href="{% url 'detail_signalements' signalements.id %}" class="btn btn-secondary">Annuler</a>
+        
+            
+    </form>
 
-<a href="{% url 'detail_signalements' signalements.id %}">Annuler</a>
+    
+</div>
+
+{% endblock %}

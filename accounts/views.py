@@ -57,14 +57,14 @@ def login_views(request):
     return render(request, 'accounts/login.html', {"form": form})
 
 
-
+@login_required
 def liste_utilisateurs(request):
     utilisateurs = Utilisateur.objects.all()
     if request.user.role != "admis":
         return HttpResponseForbidden("Accès refusé.")
     
     return render(request, "accounts/liste_utilisateurs.html", {"utilisateurs": utilisateurs})
-
+@login_required
 def supprimer_utilisateur(request, id):
 
     utilisateur = get_object_or_404(Utilisateur,id=id)
@@ -72,7 +72,7 @@ def supprimer_utilisateur(request, id):
     
     return redirect("liste_utilisateurs")
 
-
+@login_required
 def dashboard_views(request):
     role = request.user.role
     if role == "citoyens":
@@ -105,7 +105,7 @@ def changer_role(request, pk):
         return redirect("dashboard")
     
     return render(request, "accounts/changer_role.html", {"utilisateur": utilisateur})
-
+@login_required
 def logout_views(request):
     logout(request)
     return redirect("accueil")

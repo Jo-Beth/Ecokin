@@ -38,13 +38,13 @@ def liste_signalements(request):
 def liste_signalements_autorite(request):
     signalements = Signalements.objects.all()
     return render(request, "signalements/liste_autorite.html", {"signalements": signalements})
-    
+@login_required   
 def detail_signalements(request,pk):
     signalements = get_object_or_404(Signalements, pk=pk)
     peut_modifier = request.user.peut_etre_modifier(signalements)
     peut_supprimer = request.user.peut_etre_supprimer(signalements)
     return render(request, "signalements/detail_signalements.html", {"signalements": signalements, "peut_modifier": peut_modifier, "peut_supprimer": peut_supprimer })
-
+@login_required
 def modifier_signalements(request, pk):
     signalements = get_object_or_404(Signalements, pk=pk)
     if  not request.user.peut_etre_modifier(signalements):
@@ -61,7 +61,7 @@ def modifier_signalements(request, pk):
     else:
         form = SignalementsForm(instance=signalements)
     return render(request, "signalements/modifier_signalements.html", {"form":form, "signalements": signalements})
-    
+@login_required    
 def supprimer_signalements(request, pk):
     signalements = get_object_or_404(Signalements, pk=pk)
     if not request.user.peut_etre_supprimer(signalements):  
@@ -99,7 +99,7 @@ def traiter_signalement(request, pk):
         return redirect("dashboard")
     return render(request,"signalements/traiter.html", {"signalement": signalements})
            
-                
+@login_required                
 def carte_signalements(request):
     statut = request.GET.get("etat")
     signalements = Signalements.objects.all().order_by('-date_creation')
