@@ -198,17 +198,104 @@
                 letter-spacing: 0.02em;
             }
             @media (max-width: 900px) {
-                .app-shell { grid-template-columns: 1fr; }
-                .sidebar { display: none; }
-                .hero, .grid-2 { grid-template-columns: 1fr; }
-                .mobile-toggle { display: inline-block; }
-                .topbar { flex-wrap: wrap; gap: 10px; }
-                .nav-links {
-                    width: 100%;
-                    justify-content: flex-start;
+
+                /* Mise en page générale */
+                .app-shell {
+                    grid-template-columns: 1fr;
+                }
+
+                /* Masquer la sidebar sur mobile */
+                .sidebar {
                     display: none;
                 }
-                .nav-links.open { display: flex; flex-direction: column; align-items: flex-start; padding-top: 6px; }
+
+                /* Hero et sections */
+                .hero,
+                .grid-2 {
+                    grid-template-columns: 1fr;
+                    gap: 20px;
+                }
+
+                .hero {
+                    padding: 20px;
+                }
+
+                .hero h1 {
+                    font-size: 1.8rem;
+                }
+
+                /* Barre du haut */
+                .topbar {
+                    flex-wrap: wrap;
+                    gap: 10px;
+                }
+
+                /* Bouton menu */
+                .mobile-toggle {
+                    display: inline-block;
+                }
+
+                /* Navigation */
+                .nav-links {
+                    width: 100%;
+                    display: none;
+                    flex-direction: column;
+                    align-items: flex-start;
+                    gap: 10px;
+                    padding-top: 10px;
+                }
+
+                .nav-links.open {
+                    display: flex;
+                }
+
+                /* Dashboard */
+                .dashboard-grid {
+                    grid-template-columns: 1fr;
+                    gap: 20px;
+                }
+
+                /* Cartes */
+                .card {
+                    padding: 15px;
+                }
+
+                /* Boutons */
+                .btn {
+                    width: 100%;
+                    text-align: center;
+                }
+
+                /* Images */
+                img {
+                    max-width: 100%;
+                    height: auto;
+                    display: block;
+                }
+
+                /* Formulaires */
+                input,
+                select,
+                textarea {
+                    width: 100%;
+                }
+
+                /* Tableaux */
+                table {
+                    font-size: 14px;
+                }
+
+                .table-card {
+                    overflow-x: auto;
+                }
+
+                /* Footer */
+                footer > div {
+                    flex-direction: column !important;
+                    gap: 20px;
+                    text-align: center;
+                }
+
             }
         </style>
     </head>
@@ -246,7 +333,7 @@
                             <a href="{% url 'inscription' %}" class="btn" style="margin:0; padding:8px 12px;">Inscription</a>
                         {% endif %}
                     </div>
-                    <a href="#" class="mobile-toggle btn secondary" style="margin:0; padding:8px 12px;" onclick="event.preventDefault(); document.getElementById('nav-links').classList.toggle('open');">Menu</a>
+                       <button type="button" class="mobile-toggle btn secondary" onclick="document.getElementById('nav-links').classList.toggle('open');">☰ Menu</button>
                 </nav>
 
 
