@@ -122,4 +122,13 @@ def espace_admin_views(request):
     total_signalements = Signalements.objects.count()
 
     return render(request, 'dashboard/dashboard_admin.html', {'total_signalemetns': total_signalements})
-
+@login_required
+def signalements_suivis(request):
+    signalements = Signalements.objects.exclude(statut="en_attente")
+    
+    contexte = {
+        "signalements":signalements
+    }
+    
+    return render(request, "dashboard/signalements_suivis.html", contexte)
+    

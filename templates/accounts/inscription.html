@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="card" style="max-width: 760px; margin: 0 auto;">
+<div class="card" style="max-width: 500px; margin: 0 auto;">
     <span class="pill">📝 Inscription</span>
     <h3>Créez votre compte Écokin</h3>
     <p>Rejoignez la plateforme pour signaler, suivre et agir pour l’environnement.</p>
@@ -36,9 +36,10 @@
         <button type="submit" class="btn">S’inscrire</button>
     </form>
 
+   
     <p style="margin-top: 12px;">
         Vous avez déjà un compte ?
-        <a href="{% url 'login' %}">Se connecter</a>
+        <a href="{% url 'login' %}" type="susbmit" class="btn">Se connecter</a>
     </p>
 </div>
 {% endblock %}

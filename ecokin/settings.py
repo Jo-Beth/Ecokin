@@ -140,3 +140,6 @@ LOGIN_REDIRECT_URL = 'aller_a_mon_espace'
 LOGOUT_REDIRECT_URL = '/'
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+#Durée de vie de la session :
+SESSION_COOKIE_AGE = 1209600

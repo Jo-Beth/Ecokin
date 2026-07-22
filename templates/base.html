@@ -300,7 +300,7 @@
         </style>
     </head>
     <body>
-        {% if request.resolver_match.url_name != 'accueil' %}
+        {% if request.resolver_match.url_name not in 'accueil login inscription' %}
             {% block navigation %}
             <div class="app-shell">
                 <aside class="sidebar">

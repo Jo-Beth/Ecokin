@@ -48,11 +48,18 @@ def login_views(request):
             
             if user is not None:
                 login(request, user)
+                
+                if request.POST.get('remember_me'):
+                    #Garde la session ouvert pendant 2 semaines (en seconde)
+                    request.session.set_expiry(1209600)
+                else:
+                    #La session expire à la fermeture du navigateur
+                    request.session.set_expiry(0)
             
                 return redirect("aller_a_mon_espace")
     else:
         form = AuthenticationForm()
-        return render(request, "accounts/login.html", {"erreurs": "indentifiants incorrects"})
+        
         
     return render(request, 'accounts/login.html', {"form": form})
 

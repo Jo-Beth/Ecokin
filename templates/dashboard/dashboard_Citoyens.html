@@ -1,74 +1,211 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="grid-2">
-    <div class="card">
-        <span class="pill">🌱 Mon impact citoyen</span>
-        <h3>Bienvenue dans votre espace</h3>
-        <p>Votre espace vous permet de suivre vos signalements et d’agir concrètement pour la qualité de vie dans votre commune.</p>
-        <div style="margin-top: 12px;">
-            <a href="{% url 'creer' %}" class="btn">Créer un signalement</a>
-            <a href="{% url 'liste' %}" class="btn secondary">Voir mes signalements</a>
+<div class="grid-2" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 24px;">
+
+    <!-- Carte 1 : Impact & Actions Citoyennes -->
+    <div class="card" style="padding: 24px; background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
+        <span class="pill" style="display: inline-flex; align-items: center; gap: 6px; background: #dcfce7; color: #166534; padding: 4px 12px; border-radius: 20px; font-size: 13px; font-weight: 600; margin-bottom: 12px;">
+            🌱 Mon impact citoyen
+        </span>
+        <h3 style="margin: 0 0 8px 0; font-size: 20px; font-weight: 700; color: #0f172a;">Bienvenue dans votre espace</h3>
+        <p style="color: #64748b; font-size: 14px; margin: 0 0 20px 0; line-height: 1.5;">
+            Votre espace vous permet de suivre vos signalements et d'agir concrètement pour la qualité de votre environnement.
+        </p>
+
+        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+            <a href="{% url 'creer' %}" class="btn" style="padding: 10px 16px; font-size: 14px; font-weight: 600; text-decoration: none;">
+                ➕ Créer un signalement
+            </a>
+            <a href="{% url 'liste' %}" class="btn secondary" style="padding: 10px 16px; font-size: 14px; font-weight: 600; text-decoration: none; background: #f1f5f9; color: #334155; border-radius: 8px;">
+                📋 Voir mes signalements
+            </a>
         </div>
     </div>
 
-    <div class="card">
-        <h3>Notifications 🔔</h3>
-        <p>{{ notifications_non_lues }} non lues</p>
-        {% for notification in notifications %}
-            <div class="notice">
-                {{ notification.message }}
-                {% if not notification.lu %}
-                    <br><a href="{% url 'lire' notification.pk %}">Marquer comme lu</a>
-                {% endif %}
-            </div>
-        {% empty %}
-            <p>Aucune notification pour le moment.</p>
-        {% endfor %}
+    <!-- Carte 2 : Centre de Notifications -->
+    <div class="card" style="padding: 24px; background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <h3 style="margin: 0; font-size: 18px; font-weight: 700; color: #0f172a;">Notifications 🔔</h3>
+            <span style="background: #e0f2fe; color: #0369a1; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 700;">
+                {{ notifications_non_lues }} non lue{{ notifications_non_lues|pluralize }}
+            </span>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 10px; max-height: 280px; overflow-y: auto;">
+            {% for notification in notifications %}
+                <div class="notice" style="padding: 12px 14px; border-radius: 8px; font-size: 13px; display: flex; justify-content: space-between; align-items: center; {% if not notification.lu %}background: #f0f9ff; border-left: 4px solid #0284c7;{% else %}background: #f8fafc; border-left: 4px solid #cbd5e1; opacity: 0.8;{% endif %}">
+                    <div>
+                        <p style="margin: 0; color: #1e293b; font-weight: 500;">{{ notification.message }}</p>
+                    </div>
+
+                    {% if not notification.lu %}
+                        <a href="{% url 'lire' notification.pk %}" style="color: #0284c7; font-weight: 600; font-size: 12px; text-decoration: none; white-space: nowrap; margin-left: 10px;">
+                            ✓ Marquer comme lu
+                        </a>
+                    {% endif %}
+                </div>
+            {% empty %}
+                <div style="text-align: center; padding: 24px; color: #94a3b8;">
+                    <span style="font-size: 28px; display: block; margin-bottom: 6px;">🔕</span>
+                    <p style="margin: 0; font-size: 14px;">Aucune notification pour le moment.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+<div class="card" style="margin-top: 20px; padding: 24px; background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
+    
+    <!-- En-tête de la carte -->
+    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 18px;">
+        <span style="font-size: 20px; background: #f1f5f9; padding: 8px; border-radius: 8px;">👤</span>
+        <h3 style="margin: 0; font-size: 18px; font-weight: 700; color: #0f172a;">Informations du compte</h3>
+    </div>
+
+    <!-- Liste des détails du profil -->
+    <div class="metric-list" style="display: flex; flex-direction: column; gap: 12px;">
+        
+        <!-- Nom d'utilisateur -->
+        <div class="metric-row" style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 1px solid #f1f5f9;">
+            <span style="color: #64748b; font-size: 14px;">Nom d'utilisateur</span>
+            <strong style="color: #1e293b; font-size: 14px; font-weight: 600;">{{ request.user.username }}</strong>
+        </div>
+
+        <!-- Date de création -->
+        <div class="metric-row" style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 1px solid #f1f5f9;">
+            <span style="color: #64748b; font-size: 14px;">Membre depuis</span>
+            <strong style="color: #1e293b; font-size: 14px; font-weight: 600;">
+                {{ request.user.date_joined|date:"d/m/Y" }}
+            </strong>
+        </div>
+
+        <!-- Rôle -->
+        <div class="metric-row" style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="color: #64748b; font-size: 14px;">Rôle</span>
+            <span style="background: #dcfce7; color: #166534; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">
+                🌱 {{ request.user.get_role_display|default:"Citoyen" }}
+            </span>
+        </div>
+
     </div>
 </div>
 
-<div class="card" style="margin-top: 16px;">
-    <h3>Informations du compte</h3>
-    <div class="metric-list">
-        <div class="metric-row"><span>Nom</span><strong>{{ request.user.username }}</strong></div>
-        <div class="metric-row"><span>Date de création</span><strong>{{ request.user.date_joined|date:"d/m/Y H:i" }}</strong></div>
-        <div class="metric-row"><span>Rôle</span><strong>{{ request.user.get_role_display }}</strong></div>
+<div class="dashboard-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-top: 20px;">
+    
+    <!-- Total Signalements -->
+    <div class="card" style="padding: 18px; background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h3 style="margin: 0; font-size: 13px; font-weight: 600; color: #64748b;">Total signalements</h3>
+            <span style="font-size: 18px; background: #f1f5f9; padding: 6px; border-radius: 8px;">📢</span>
+        </div>
+        <div class="stat-value" style="font-size: 26px; font-weight: 800; color: #0f172a; margin-top: 8px;">
+            {{ total_signalements }}
+        </div>
     </div>
+
+    <!-- En attente -->
+    <div class="card" style="padding: 18px; background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h3 style="margin: 0; font-size: 13px; font-weight: 600; color: #64748b;">En attente</h3>
+            <span style="font-size: 18px; background: #fef3c7; color: #92400e; padding: 6px; border-radius: 8px;">⏳</span>
+        </div>
+        <div class="stat-value" style="font-size: 26px; font-weight: 800; color: #92400e; margin-top: 8px;">
+            {{ en_attente }}
+        </div>
+    </div>
+
+    <!-- En cours -->
+    <div class="card" style="padding: 18px; background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h3 style="margin: 0; font-size: 13px; font-weight: 600; color: #64748b;">En cours</h3>
+            <span style="font-size: 18px; background: #e0f2fe; color: #075985; padding: 6px; border-radius: 8px;">🔄</span>
+        </div>
+        <div class="stat-value" style="font-size: 26px; font-weight: 800; color: #075985; margin-top: 8px;">
+            {{ en_cours }}
+        </div>
+    </div>
+
+    <!-- Résolus -->
+    <div class="card" style="padding: 18px; background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h3 style="margin: 0; font-size: 13px; font-weight: 600; color: #64748b;">Résolus</h3>
+            <span style="font-size: 18px; background: #dcfce7; color: #166534; padding: 6px; border-radius: 8px;">✅</span>
+        </div>
+        <div class="stat-value" style="font-size: 26px; font-weight: 800; color: #166534; margin-top: 8px;">
+            {{ resolus }}
+        </div>
+    </div>
+
+    <!-- Rejetés -->
+    <div class="card" style="padding: 18px; background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h3 style="margin: 0; font-size: 13px; font-weight: 600; color: #64748b;">Rejetés</h3>
+            <span style="font-size: 18px; background: #fee2e2; color: #991b1b; padding: 6px; border-radius: 8px;">❌</span>
+        </div>
+        <div class="stat-value" style="font-size: 26px; font-weight: 800; color: #991b1b; margin-top: 8px;">
+            {{ rejetes }}
+        </div>
+    </div>
+
 </div>
 
-<div class="dashboard-grid" style="margin-top: 16px;">
-    <div class="card">
-        <h3>Total signalements</h3>
-        <div class="stat-value">{{ total_signalements }}</div>
+<div class="card" style="margin-top: 20px; padding: 24px; background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
+    
+    <!-- En-tête avec titre et icône -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 20px; background: #f1f5f9; padding: 8px; border-radius: 8px;">📊</span>
+            <h3 style="margin: 0; font-size: 18px; font-weight: 700; color: #0f172a;">Suivi environnemental</h3>
+        </div>
+        <span style="font-size: 12px; color: #64748b; background: #f8fafc; padding: 4px 8px; border-radius: 6px; border: 1px solid #e2e8f0;">
+            Aperçu visuel
+        </span>
     </div>
-    <div class="card">
-        <h3>En attente</h3>
-        <div class="stat-value">{{ en_attente }}</div>
-    </div>
-    <div class="card">
-        <h3>En cours</h3>
-        <div class="stat-value">{{ en_cours }}</div>
-    </div>
-    <div class="card">
-        <h3>Résolus</h3>
-        <div class="stat-value">{{ resolus }}</div>
-    </div>
-    <div class="card">
-        <h3>Rejetés</h3>
-        <div class="stat-value">{{ rejetes }}</div>
-    </div>
-</div>
 
-<div class="card">
-    <h3>Suivi environnemental</h3>
-    <svg width="100%" height="180" viewBox="0 0 420 180" xmlns="http://www.w3.org/2000/svg">
-        <rect x="20" y="20" width="380" height="140" rx="16" fill="#f4fcf8"></rect>
-        <line x1="40" y1="140" x2="380" y2="140" stroke="#9ccdb7" stroke-width="2"></line>
-        <rect x="60" y="90" width="40" height="50" rx="6" fill="#36b37e"></rect>
-        <rect x="140" y="70" width="40" height="70" rx="6" fill="#1f7a5b"></rect>
-        <rect x="220" y="55" width="40" height="85" rx="6" fill="#114b3d"></rect>
-        <rect x="300" y="80" width="40" height="60" rx="6" fill="#36b37e"></rect>
-    </svg>
+    <!-- Graphique SVG Stylisé -->
+    <div style="background: #f8fafc; border-radius: 10px; padding: 16px; border: 1px solid #f1f5f9;">
+        <svg width="100%" height="180" viewBox="0 0 420 180" xmlns="http://www.w3.org/2000/svg" style="display: block;">
+            
+            <!-- Lignes de grille en arrière-plan -->
+            <line x1="40" y1="30" x2="380" y2="30" stroke="#e2e8f0" stroke-dasharray="4" stroke-width="1" />
+            <line x1="40" y1="80" x2="380" y2="80" stroke="#e2e8f0" stroke-dasharray="4" stroke-width="1" />
+            <line x1="40" y1="130" x2="380" y2="130" stroke="#cbd5e1" stroke-width="1" />
+
+            <!-- Barre 1 : En attente (Jaune/Ambre) -->
+            <rect x="65" y="70" width="45" height="60" rx="8" fill="#f59e0b" />
+            <text x="87.5" y="60" text-anchor="middle" font-size="12" font-weight="700" fill="#d97706">{{ en_attente }}</text>
+
+            <!-- Barre 2 : En cours (Bleu) -->
+            <rect x="145" y="50" width="45" height="80" rx="8" fill="#0284c7" />
+            <text x="167.5" y="40" text-anchor="middle" font-size="12" font-weight="700" fill="#0369a1">{{ en_cours }}</text>
+
+            <!-- Barre 3 : Résolus (Vert) -->
+            <rect x="225" y="30" width="45" height="100" rx="8" fill="#16a34a" />
+            <text x="247.5" y="20" text-anchor="middle" font-size="12" font-weight="700" fill="#15803d">{{ resolus }}</text>
+
+            <!-- Barre 4 : Rejetés (Rouge) -->
+            <rect x="305" y="90" width="45" height="40" rx="8" fill="#dc2626" />
+            <text x="327.5" y="80" text-anchor="middle" font-size="12" font-weight="700" fill="#b91c1c">{{ rejetes }}</text>
+
+        </svg>
+    </div>
+
+    <!-- Légendes du graphique -->
+    <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 12px; margin-top: 16px; font-size: 12px; font-weight: 600;">
+        <div style="display: flex; align-items: center; gap: 6px; color: #d97706;">
+            <span style="width: 10px; height: 10px; background: #f59e0b; border-radius: 50%;"></span> En attente
+        </div>
+        <div style="display: flex; align-items: center; gap: 6px; color: #0369a1;">
+            <span style="width: 10px; height: 10px; background: #0284c7; border-radius: 50%;"></span> En cours
+        </div>
+        <div style="display: flex; align-items: center; gap: 6px; color: #15803d;">
+            <span style="width: 10px; height: 10px; background: #16a34a; border-radius: 50%;"></span> Résolus
+        </div>
+        <div style="display: flex; align-items: center; gap: 6px; color: #b91c1c;">
+            <span style="width: 10px; height: 10px; background: #dc2626; border-radius: 50%;"></span> Rejetés
+        </div>
+    </div>
+
 </div>
 {% endblock %}

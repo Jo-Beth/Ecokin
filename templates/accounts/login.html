@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="card" style="max-width: 540px; margin: 0 auto;">
+<div class="card" style="max-width: 500px; margin: 0 auto;">
     <span class="pill">🔐 Connexion</span>
     <h3>Accédez à votre espace Écokin</h3>
     <p>Connectez-vous pour suivre vos signalements et consulter votre tableau de bord.</p>
@@ -9,16 +9,26 @@
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
+        <div style="display: flex; align-items: center; gap:8px; margin: 12px 0;">
+            <input type="checkbox" pk="remember_me" name="remember_me" style="width: auto; cursor: pointer;">
+            <label for="remember_me" style="font-size: 14px; color: var(--muted); cursor: pointer; margin: 0;">
+                Se souvenire de moi
+            </label>
+        </div> 
         <button type="submit" class="btn">Se connecter</button>
     </form>
 
     {% if form.errors %}
-        <div class="notice">Votre nom d’utilisateur ou votre mot de passe est incorrect.</div>
+        <div class="notice" style="background-color: #fef2f2; color: #991b1b; border: 1px solid #f87171; border-radius: 8px; padding: 12px 16px; margin-top: 16px; font-weight: 600; font-size: 14px display: flex; align-items: center; gap: 8px;">
+
+            <span>⚠</span>
+            <span>Votre nom d'utilisateur ou votre mot de passe est incorrect.</span>
+        </div>
     {% endif %}
 
     <p style="margin-top: 12px;">
         Vous n’avez pas encore de compte ?
-        <a href="{% url 'inscription' %}">Créer un compte</a>
+        <a href="{% url 'inscription' %}" type="submit" class="btn">Créer un compte</a>
     </p>
 </div>
 {% endblock %}
