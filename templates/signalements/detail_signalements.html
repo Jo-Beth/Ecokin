@@ -1,65 +1,117 @@
-{% extends 'base.html'%}
+{% extends 'base.html' %}
 
 {% block content %}
- <div class="card" style="max-widht: 650px; margin: 20px auto; padding: 0 15px; background: #f5fff9; border: 1px solid #d8f3e2;">
-    <h1>Titre : {{ signalements.titre }}</h1>
+{% with item=signalement|default:signalements %}
+<div class="card" style="max-width: 650px; margin: 30px auto; padding: 28px; background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
 
-    <p>Auteur : {{signalements.utilisateur.username }}</p>
-        
-    <p> Description : {{ signalements.description}}</p>
+    <!-- En-tête : Titre & Badge Statut -->
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 16px; flex-wrap: wrap;">
+        <div>
+            <span class="pill" style="display: inline-flex; align-items: center; gap: 6px; background: #e0f2fe; color: #0369a1; padding: 4px 12px; border-radius: 20px; font-size: 13px; font-weight: 600; margin-bottom: 8px;">
+                📌 Détail du signalement
+            </span>
+            <h1 style="margin: 0; font-size: 22px; font-weight: 800; color: #0f172a;">
+                {{ item.titre }}
+            </h1>
+        </div>
 
-    <p>Statut : {{ signalements.statut}} </p>
-    
-    <p>Date : {{ signalements.date_creation }}</p>
-        
-    {% if signalements.photo %}
-    <img src="{{ signalements.photo.url }}" width="400">
+        <!-- Badges d'état colorés -->
+        {% if item.statut == 'en_attente' or item.statut == 'EN_ATTENTE' %}
+            <span style="background: #fef3c7; color: #92400e; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 600;">
+                ⏳ {{ item.get_statut_display|default:item.statut }}
+            </span>
+        {% elif item.statut == 'en_cours' or item.statut == 'EN_COURS' %}
+            <span style="background: #e0f2fe; color: #075985; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 600;">
+                🔄 {{ item.get_statut_display|default:item.statut }}
+            </span>
+        {% elif item.statut == 'resolu' or item.statut == 'RESOLU' %}
+            <span style="background: #dcfce7; color: #166534; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 600;">
+                ✅ {{ item.get_statut_display|default:item.statut }}
+            </span>
+        {% else %}
+            <span style="background: #fee2e2; color: #991b1b; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 600;">
+                ❌ {{ item.get_statut_display|default:item.statut }}
+            </span>
+        {% endif %}
+    </div>
+
+    <!-- Informations de l'auteur & date -->
+    <div style="display: flex; gap: 16px; color: #64748b; font-size: 13px; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid #f1f5f9;">
+        <span>👤 <strong>Auteur :</strong> {{ item.utilisateur.username|default:"Anonyme" }}</span>
+        <span>📅 <strong>Publié le :</strong> {{ item.date_creation|date:"d/m/Y" }}</span>
+    </div>
+
+    <!-- Description -->
+    <div style="margin-bottom: 20px;">
+        <h3 style="font-size: 14px; font-weight: 700; color: #475569; margin: 0 0 6px 0; text-transform: uppercase; letter-spacing: 0.5px;">
+            Description
+        </h3>
+        <p style="color: #334155; font-size: 15px; line-height: 1.6; margin: 0; background: #f8fafc; padding: 14px; border-radius: 8px;">
+            {{ item.description }}
+        </p>
+    </div>
+
+    <!-- Photo associée -->
+    {% if item.photo %}
+        <div style="margin-bottom: 24px;">
+            <h3 style="font-size: 14px; font-weight: 700; color: #475569; margin: 0 0 8px 0; text-transform: uppercase; letter-spacing: 0.5px;">
+                Photo d'illustration
+            </h3>
+            <div style="border-radius: 8px; overflow: hidden; max-height: 350px; background: #f8fafc; border: 1px solid #e2e8f0;">
+                <img src="{{ item.photo.url }}" alt="Photo du signalement {{ item.titre }}" style="width: 100%; height: auto; max-height: 350px; object-fit: cover; display: block;">
+            </div>
+        </div>
     {% endif %}
 
-    <hr>
+    <!-- Zone des Actions Utilisateur & Autorités -->
+    <div style="border-top: 1px solid #e2e8f0; padding-top: 20px; display: flex; flex-direction: column; gap: 12px;">
 
-    {% if peut_modifier %}
+        <!-- Actions de Modification & Suppression -->
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            {% if peut_modifier %}
+                <a href="{% url 'modifier_signalements' item.pk %}" class="btn btn-secondary" style="padding: 8px 16px; font-size: 13px; font-weight: 600; text-decoration: none; background: #f1f5f9; color: #334155; border-radius: 6px; display: inline-flex; align-items: center; gap: 6px;">
+                    ✏️ Modifier
+                </a>
+            {% endif %}
 
-    <a href="{% url 'modifier_signalements' signalements.pk %} "class="btn btn-secondary">
-       📄 Modifier
-    </a>
-    {% endif %}
+            {% if peut_supprimer %}
+                <a href="{% url 'supprimer_signalements' item.pk %}" class="btn btn-secondary" style="padding: 8px 16px; font-size: 13px; font-weight: 600; text-decoration: none; background: #fee2e2; color: #dc2626; border-radius: 6px; display: inline-flex; align-items: center; gap: 6px;">
+                    🗑️ Supprimer
+                </a>
+            {% endif %}
 
-    <hr>
+            <a href="{% url 'liste' %}" class="btn btn-secondary" style="padding: 8px 16px; font-size: 13px; font-weight: 600; text-decoration: none; background: #f1f5f9; color: #475569; border-radius: 6px; display: inline-flex; align-items: center; gap: 6px; margin-left: auto;">
+                ↩️ Retour à la liste
+            </a>
+        </div>
 
-    {% if peut_supprimer %}
+        <!-- Actions Rapides de Changement de Statut (Gestionnaires / ONG) -->
+        {% if request.user.changer_statut or request.user.peut_changer_statut %}
+            <div style="background: #f8fafc; padding: 12px; border-radius: 8px; margin-top: 8px; border: 1px solid #cbd5e1;">
+                <span style="font-size: 12px; font-weight: 700; color: #475569; display: block; margin-bottom: 8px; text-transform: uppercase;">
+                    ⚡ Actions de Traitement rapide
+                </span>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    {% if request.user.changer_statut %}
+                        <a href="{% url 'changer_statut' item.pk %}" class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px; font-weight: 600; text-decoration: none; background: #e0f2fe; color: #0369a1; border-radius: 6px;">
+                            🔄 Mettre en cours
+                        </a>
+                        <a href="{% url 'changer_statut' item.pk %}" class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px; font-weight: 600; text-decoration: none; background: #dcfce7; color: #15803d; border-radius: 6px;">
+                            ✅ Marquer comme résolu
+                        </a>
+                    {% endif %}
 
-    <a href="{% url 'supprimer_signalements' signalements.pk %}" class="btn btn-secondary">
-       ✖ Supprimer
-    </a>
-    {% endif %}
-    <hr>
+                    {% if request.user.peut_changer_statut %}
+                        <a href="{% url 'changer_statut' item.pk %}" class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px; font-weight: 600; text-decoration: none; background: #fee2e2; color: #b91c1c; border-radius: 6px;">
+                            ❌ Rejeter
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
 
-    <a href="{% url 'liste' %} "class="btn btn-secondary"  ">
-        🧾 Retour à la liste
-    </a>
+    </div>
 
-
-
-    {% if request.user.changer_statut %}
-    <a href="{% url 'changer_statut' signalements.pk %} "class="btn btn-secondary">
-        Mettre en cours
-    </a>
-
-    {% endif %}
-
-    {% if request.user.changer_statut %}
-    <a href="{% url 'changer_statut' signalements.pk %}" class="btn btn-secondary">
-        Marquer comme resolu
-    </a>
-
-    {% endif %}
-
-    {% if request.user.peut_changer_statut %}
-    <a href="{% url 'changer_statut' signalements.pk %}" class="btn btn-secondary">
-        Afficher le rejet
-    </a>
-</div> 
-{% endif %}
-
-{% endblock%}
+</div>
+{% endwith %}
+{% endblock %}

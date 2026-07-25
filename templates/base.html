@@ -197,23 +197,69 @@
                 font-weight: 600;
                 letter-spacing: 0.02em;
             }
+                        /* ==========================================================================
+            1. STYLES PAR DÉFAUT (Pour Machines, PC, Ordinateurs portables)
+            ========================================================================== */
+
+            /* Structure principale de l'application sur grand écran */
+            .app-shell {
+                display: grid;
+                grid-template-columns: 260px 1fr; /* Largeur de la sidebar + le reste pour le contenu */
+                min-height: 100vh;
+            }
+
+            /* Grille réactive automatique pour le Dashboard */
+            .dashboard-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 24px;
+            }
+
+            /* Grille à 2 colonnes sur PC */
+            .grid-2 {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 24px;
+            }
+
+            /* Sécurité pour éviter tout débordement d'images ou de cartes sur PC */
+            img {
+                max-width: 100%;
+                height: auto;
+            }
+
+            .card {
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            .table-card {
+                width: 100%;
+                overflow-x: auto;
+            }
+
+
+            /* ==========================================================================
+            2. MEDIA QUERY (Pour Mobiles et Écrans <= 900px)
+            ========================================================================== */
             @media (max-width: 900px) {
 
-                /* Mise en page générale */
+                /* Passage en 1 seule colonne globale */
                 .app-shell {
                     grid-template-columns: 1fr;
                 }
 
-                /* Masquer la sidebar sur mobile */
+                /* Masquer la sidebar sur petit écran */
                 .sidebar {
                     display: none;
                 }
 
-                /* Hero et sections */
+                /* Passer les grilles en 1 seule colonne */
+                .dashboard-grid,
                 .hero,
                 .grid-2 {
                     grid-template-columns: 1fr;
-                    gap: 20px;
+                    gap: 16px;
                 }
 
                 .hero {
@@ -224,79 +270,56 @@
                     font-size: 1.8rem;
                 }
 
-                /* Barre du haut */
+                /* Barre supérieure et navigation */
                 .topbar {
                     flex-wrap: wrap;
                     gap: 10px;
                 }
 
-                /* Bouton menu */
                 .mobile-toggle {
                     display: inline-block;
                 }
 
-                /* Navigation */
                 .nav-links {
                     width: 100%;
                     display: none;
                     flex-direction: column;
                     align-items: flex-start;
                     gap: 10px;
-                    padding-top: 10px;
                 }
 
                 .nav-links.open {
                     display: flex;
                 }
 
-                /* Dashboard */
-                .dashboard-grid {
-                    grid-template-columns: 1fr;
-                    gap: 20px;
-                }
-
-                /* Cartes */
+                /* Adaptations des boutons, cartes et formulaires */
                 .card {
                     padding: 15px;
                 }
 
-                /* Boutons */
-                .btn {
+                .btn, .btn-secondary {
                     width: 100%;
                     text-align: center;
+                    box-sizing: border-box;
                 }
 
-                /* Images */
-                img {
-                    max-width: 100%;
-                    height: auto;
-                    display: block;
-                }
-
-                /* Formulaires */
-                input,
-                select,
-                textarea {
+                input, select, textarea {
                     width: 100%;
+                    box-sizing: border-box;
                 }
 
-                /* Tableaux */
                 table {
-                    font-size: 14px;
+                    font-size: 13px;
                 }
 
-                .table-card {
-                    overflow-x: auto;
-                }
-
-                /* Footer */
+                /* Footer sur mobile */
                 footer > div {
                     flex-direction: column !important;
-                    gap: 20px;
+                    gap: 16px;
                     text-align: center;
                 }
-
             }
+
         </style>
     </head>
     <body>

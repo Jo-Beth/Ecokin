@@ -1,49 +1,102 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="card" style="margin-bottom: 16px;">
-    <span class="pill">🛠️ Espace de gestion</span>
-    <h3>Gérez vos ressources et vos publications</h3>
-    <p>Publiez, consultez et organisez vos documents autour des catégories de votre réseau.</p>
-    <div style="margin-top: 12px;">
-        <a href="{% url 'creer_article' %}" class="btn">Publier une nouvelle ressource</a>
-    </div>
-</div>
+<div style="max-width: 900px; margin: 0 auto; padding-bottom: 40px;">
 
-<div class="card" style="margin-bottom: 16px;">
-    <h3>Catégories disponibles</h3>
-    <div class="metric-list">
-        {% for category in categories %}
-        <div class="metric-row"><span>{{ category.nom }}</span><strong>{{ category.articles.count }}</strong></div>
-        {% empty %}
-        <p>Aucune catégorie disponible.</p>
-        {% endfor %}
+    <!-- Carte En-tête / Action principale -->
+    <div class="card" style="margin-bottom: 24px; padding: 24px; background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
+        <span class="pill" style="display: inline-flex; align-items: center; gap: 6px; background: #dcfce7; color: #166534; padding: 4px 12px; border-radius: 20px; font-size: 13px; font-weight: 600; margin-bottom: 8px;">
+            🛠️ Espace de gestion
+        </span>
+        <h3 style="margin: 0 0 8px 0; font-size: 20px; font-weight: 800; color: #0f172a;">Gérez vos ressources et vos publications</h3>
+        <p style="margin: 0; color: #64748b; font-size: 14px; line-height: 1.5;">
+            Publiez, consultez et organisez vos documents autour des catégories de votre réseau.
+        </p>
+        <div style="margin-top: 16px;">
+            <a href="{% url 'creer_article' %}" class="btn" style="padding: 10px 18px; font-size: 14px; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+                ➕ Publier une nouvelle ressource
+            </a>
+        </div>
     </div>
-</div>
 
-<div class="card">
-    <h3>Mes ressources publiées</h3>
-    <table>
-        <thead>
-            <tr>
-                <th>Titre</th>
-                <th>Type</th>
-                <th>Catégories</th>
-                <th>Statut</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for article in articles %}
-            <tr>
-                <td>{{ article.titre }}</td>
-                <td>{{ article.get_type_ressource_display }}</td>
-                <td>{% for category in article.categories.all %}{{ category.nom }}{% if not forloop.last %}, {% endif %}{% empty %}Aucune{% endfor %}</td>
-                <td>{% if article.est_publie %}Publié{% else %}Brouillon{% endif %}</td>
-            </tr>
+    <!-- Carte Catégories disponibles -->
+    <div class="card" style="margin-bottom: 24px; padding: 24px; background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
+        <h3 style="margin: 0 0 16px 0; font-size: 18px; font-weight: 700; color: #0f172a;">Catégories disponibles</h3>
+        <div class="metric-list" style="display: flex; flex-direction: column; gap: 10px;">
+            {% for category in categories %}
+                <div class="metric-row" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: #f8fafc; border-radius: 8px; border: 1px solid #f1f5f9;">
+                    <span style="font-size: 14px; font-weight: 600; color: #334155;">{{ category.nom }}</span>
+                    <strong style="background: #e2e8f0; color: #475569; padding: 2px 8px; border-radius: 12px; font-size: 12px;">
+                        {{ category.articles.count|default:0 }}
+                    </strong>
+                </div>
             {% empty %}
-            <tr><td colspan="4">Aucune ressource publiée pour le moment.</td></tr>
+                <p style="margin: 0; color: #94a3b8; font-size: 14px;">Aucune catégorie disponible.</p>
             {% endfor %}
-        </tbody>
-    </table>
+        </div>
+    </div>
+
+    <!-- Carte Tableau des ressources publiées -->
+    <div class="card" style="padding: 24px; background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
+        <h3 style="margin: 0 0 16px 0; font-size: 18px; font-weight: 700; color: #0f172a;">Mes ressources publiées</h3>
+        
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 14px;">
+                <thead>
+                    <tr style="border-bottom: 2px solid #f1f5f9; color: #64748b; font-size: 13px; text-transform: uppercase;">
+                        <th style="padding: 12px 10px;">Titre</th>
+                        <th style="padding: 12px 10px;">Type</th>
+                        <th style="padding: 12px 10px;">Catégories</th>
+                        <th style="padding: 12px 10px;">Statut</th>
+                        <th style="padding: 12px 10px; text-align: right;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for article in articles %}
+                        <tr style="border-bottom: 1px solid #f1f5f9;">
+                            <td style="padding: 12px 10px; font-weight: 600; color: #0f172a;">
+                                {{ article.titre }}
+                            </td>
+                            <td style="padding: 12px 10px; color: #475569;">
+                                {{ article.get_type_ressource_display|default:article.type_ressource }}
+                            </td>
+                            <td style="padding: 12px 10px; color: #475569;">
+                                {% for category in article.categories.all %}
+                                    <span style="background: #f1f5f9; padding: 2px 8px; border-radius: 4px; font-size: 12px;">{{ category.nom }}</span>{% if not forloop.last %} {% endif %}
+                                {% empty %}
+                                    <span style="color: #cbd5e1;">—</span>
+                                {% endfor %}
+                            </td>
+                            <td style="padding: 12px 10px;">
+                                {% if article.est_publie %}
+                                    <span style="background: #dcfce7; color: #166534; padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 600;">
+                                        Publié
+                                    </span>
+                                {% else %}
+                                    <span style="background: #f1f5f9; color: #64748b; padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 600;">
+                                        Brouillon
+                                    </span>
+                                {% endif %}
+                            </td>
+                            <td style="padding: 12px 10px; text-align: right;">
+                                <div style="display: inline-flex; gap: 6px;">
+                                    {% if article.pk %}
+                                        <a href="{% url 'modifier_article' article.pk %}" style="color: #0284c7; text-decoration: none; font-size: 13px; font-weight: 600;">Modifier</a>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="5" style="padding: 24px; text-align: center; color: #94a3b8;">
+                                Aucune ressource publiée pour le moment.
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
 </div>
 {% endblock %}

@@ -9,12 +9,19 @@
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <div style="display: flex; align-items: center; gap:8px; margin: 12px 0;">
-            <input type="checkbox" pk="remember_me" name="remember_me" style="width: auto; cursor: pointer;">
-            <label for="remember_me" style="font-size: 14px; color: var(--muted); cursor: pointer; margin: 0;">
-                Se souvenire de moi
+        <div style="display: flex; align-items: center; gap: 10px; margin: 16px 0;">
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; user-select: none;">
+                <input 
+                    type="checkbox" 
+                    id="remember_me" 
+                    name="remember_me" 
+                    style="width: 18px; height: 18px; accent-color: #16a34a; cursor: pointer;"
+                >
+                <span style="font-size: 14px; color: #475569; font-weight: 500;">
+                    Se souvenir de moi
+                </span>
             </label>
-        </div> 
+        </div>
         <button type="submit" class="btn">Se connecter</button>
     </form>
 

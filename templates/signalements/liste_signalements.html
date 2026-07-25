@@ -1,41 +1,98 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
 {% block content %}
-    <h1>Mes signalements</h1>
+<div style="max-width: 500px; margin: 0 auto; padding-bottom: 40px;">
+
+    <!-- En-tête avec titre et retour à l'espace -->
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 12px;">
+        <div>
+            <span class="pill" style="display: inline-flex; align-items: center; gap: 6px; background: #dcfce7; color: #166534; padding: 4px 12px; border-radius: 20px; font-size: 13px; font-weight: 600; margin-bottom: 6px;">
+                📋 Mes Contributions
+            </span>
+            <h1 style="margin: 0; font-size: 24px; font-weight: 800; color: #0f172a;">Mes signalements</h1>
+        </div>
+
+        <a href="{% url 'aller_a_mon_espace' %}" class="btn btn-secondary" style="padding: 9px 16px; font-size: 13px; font-weight: 600; text-decoration: none; background: #f1f5f9; color: #475569; border-radius: 8px; display: inline-flex; align-items: center; gap: 6px;">
+            🏠 Retourner à mon espace
+        </a>
+    </div>
+
+    <!-- Liste des cartes de signalement -->
     {% if signalements %}
-        {% for signalement in signalements %}
-            <div class="card" style="margin-bottom: 16px; background: #f5fff9; border: 1px solid #d8f3e2;">
-                <h2>Titre : {{ signalement.titre}}</h2>
-                <hr>
-                <p> Description : {{ signalement.description}}</p>
-                <hr>
-                <p> Date de création : {{ signalement.date_creation}}</p>
-                <hr>
-                <p> Photo : 
-                    {% if signalement.photo %}
-                        <br>
-                        <img src="{{  signalement.photo.url }}" alt="photo du : {{ signalement.titre}}">
-                    {% else %}
-                        <span>Aucune photo fournie</span>
-                    {% endif %}    
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+            {% for signalement in signalements %}
+                <div class="card" style="padding: 24px; background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
                     
-                </p>
-                <hr>
-                <p>Statut : {{ signalement.statut}}</p>
-                <hr>
-                <a href="{% url 'modifier_signalements' signalement.pk%}"class="btn btn-secondary">📄 Modifier</a>
-                <hr>
-                <a href="{% url 'supprimer_signalements' signalement.pk%}"class="btn btn-secondary">✖  Supprimer</a> 
-                <hr>
-                
-                <a href="{% url 'aller_a_mon_espace' %}"class="btn btn-secondary" >📊 Retourner a mon espace</a>
-            </div> 
-        {% endfor %}
+                    <!-- Titre & Badge Statut -->
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 12px; flex-wrap: wrap;">
+                        <h2 style="margin: 0; font-size: 18px; font-weight: 700; color: #0f172a;">
+                            {{ signalement.titre }}
+                        </h2>
 
-        {% else %}
-            <p>Vous n'avez aucun signalements</p>
-    {% endif%}
-        
+                        {% if signalement.statut == 'en_attente' or signalement.statut == 'EN_ATTENTE' %}
+                            <span style="background: #fef3c7; color: #92400e; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">
+                                ⏳ {{ signalement.get_statut_display|default:signalement.statut }}
+                            </span>
+                        {% elif signalement.statut == 'en_cours' or signalement.statut == 'EN_COURS' %}
+                            <span style="background: #e0f2fe; color: #075985; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">
+                                🔄 {{ signalement.get_statut_display|default:signalement.statut }}
+                            </span>
+                        {% elif signalement.statut == 'resolu' or signalement.statut == 'RESOLU' %}
+                            <span style="background: #dcfce7; color: #166534; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">
+                                ✅ {{ signalement.get_statut_display|default:signalement.statut }}
+                            </span>
+                        {% else %}
+                            <span style="background: #fee2e2; color: #991b1b; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">
+                                ❌ {{ signalement.get_statut_display|default:signalement.statut }}
+                            </span>
+                        {% endif %}
+                    </div>
 
+                    <!-- Description -->
+                    <p style="color: #475569; font-size: 14px; line-height: 1.5; margin: 0 0 16px 0;">
+                        {{ signalement.description }}
+                    </p>
 
+                    <!-- Aperçu de l'image -->
+                    {% if signalement.photo %}
+                        <div style="margin-bottom: 16px; border-radius: 8px; overflow: hidden; max-height: 220px; background: #f8fafc;">
+                            <img src="{{ signalement.photo.url }}" alt="Photo de {{ signalement.titre }}" style="width: 100%; height: 220px; object-fit: cover; display: block;">
+                        </div>
+                    {% endif %}
+
+                    <!-- Footer de la carte (Date + Actions) -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f1f5f9; padding-top: 14px; flex-wrap: wrap; gap: 12px;">
+                        <span style="color: #94a3b8; font-size: 13px;">
+                            📅 {{ signalement.date_creation|date:"d/m/Y" }}
+                        </span>
+
+                        <div style="display: flex; gap: 8px;">
+                            <a href="{% url 'modifier_signalements' signalement.pk %}" class="btn btn-secondary" style="padding: 7px 14px; font-size: 13px; font-weight: 600; text-decoration: none; background: #f1f5f9; color: #334155; border-radius: 6px;">
+                                ✏️ Modifier
+                            </a>
+                            <a href="{% url 'supprimer_signalements' signalement.pk %}" class="btn btn-secondary" style="padding: 7px 14px; font-size: 13px; font-weight: 600; text-decoration: none; background: #fee2e2; color: #dc2626; border-radius: 6px;">
+                                🗑️ Supprimer
+                            </a>
+                            <a href="{% url 'detail_signalements' signalement.pk %}" class="btn btn-secondary" style="padding: 7px 14px; font-size: 13px; font-weight: 600; text-decoration: none; background: #f1f5f9; color: #334155; border-radius: 6px;">
+                                📃 Voir le détail 
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <!-- État vide -->
+        <div class="card" style="text-align: center; padding: 48px 24px; background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0;">
+            <span style="font-size: 40px; display: block; margin-bottom: 12px;">📭</span>
+            <h3 style="margin: 0 0 6px 0; font-size: 18px; color: #0f172a;">Aucun signalement trouvé</h3>
+            <p style="margin: 0 0 20px 0; color: #64748b; font-size: 14px;">Vous n'avez pas encore publié d'incident environnemental.</p>
+            <a href="{% url 'creer' %}" class="btn" style="padding: 10px 20px; font-size: 14px; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+                📍 Créer mon premier signalement
+            </a>
+        </div>
+    {% endif %}
+
+</div>
 {% endblock %}

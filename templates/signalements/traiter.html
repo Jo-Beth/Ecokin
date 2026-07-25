@@ -1,53 +1,57 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Traiter le signalement</h1>
+<div class="card" style="max-width: 600px; margin: 20px auto; padding: 28px; background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+    
+    <!-- En-tête -->
+    <span class="pill" style="display: inline-flex; align-items: center; gap: 6px; background: #e0f2fe; color: #0369a1; padding: 4px 12px; border-radius: 20px; font-size: 13px; font-weight: 600; margin-bottom: 12px;">
+        ⚙️ Traitement du signalement
+    </span>
+    <h1 style="margin: 0 0 8px 0; font-size: 22px; font-weight: 800; color: #0f172a;">Traiter le signalement</h1>
+    
+    <!-- Titre du signalement -->
+    <div style="background: #f8fafc; padding: 12px 16px; border-radius: 8px; border-left: 4px solid #0284c7; margin-bottom: 20px;">
+        <p style="margin: 0; font-size: 15px; font-weight: 600; color: #334155;">
+            {{ signalement.titre }}
+        </p>
+    </div>
 
-<p> {{ signalement.titre }}</p>
-<form method="POST" style="display:grid; gap: 12px; margin-top: 16px;">
-    {%  csrf_token %}
+    <!-- Formulaire de traitement -->
+    <form method="POST" style="display: flex; flex-direction: column; gap: 16px;">
+        {% csrf_token %}
 
-    <select name="statut" style="
-        width: 100%; 
-        padding: 10px 14px;
-        font-size: 14px;
-        font-weight: 600;
-        color: #334155;
-        background-color: #ffffff;
-        border: 1px solid #cbd5e1;
-        border-radius: 8px;
-        outline: none;
-        cursor: pointer;
-        box-shadow: 0 1px 2px rgba(0,0,0, 0.05);
-        transition: border-color 0.2s, box-shadow 0.2s;
-    ">
-        <option value="en_attente">
-           ⌛ En attente
-        </option>
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+            <label for="statut" style="font-weight: 600; font-size: 14px; color: #475569;">
+                Mettre à jour le statut :
+            </label>
             
-        <option value="en_cours">
-          🔄  En cours
-        </option>
+            <select name="statut" id="statut" style="width: 100%; padding: 10px 14px; font-size: 14px; font-weight: 600; color: #334155; background-color: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; cursor: pointer; box-shadow: 0 1px 2px rgba(0,0,0,0.05); transition: border-color 0.2s, box-shadow 0.2s;">
+                <option value="en_attente" {% if signalement.statut == 'en_attente' or signalement.statut == 'EN_ATTENTE' %}selected{% endif %}>
+                    ⏳ En attente
+                </option>
+                <option value="en_cours" {% if signalement.statut == 'en_cours' or signalement.statut == 'EN_COURS' %}selected{% endif %}>
+                    🔄 En cours
+                </option>
+                <option value="resolu" {% if signalement.statut == 'resolu' or signalement.statut == 'RESOLU' %}selected{% endif %}>
+                    ✅ Résolu
+                </option>
+                <option value="rejete" {% if signalement.statut == 'rejete' or signalement.statut == 'REJETE' %}selected{% endif %}>
+                    ❌ Rejeté
+                </option>
+            </select>
+        </div>
 
-        <option value="resolu">
-           ✅ Résolus
-        </option>
+        <!-- Boutons d'action -->
+        <div style="display: flex; gap: 12px; align-items: center; margin-top: 10px; flex-wrap: wrap;">
+            <button type="submit" class="btn" style="padding: 10px 20px; font-size: 14px; font-weight: 600; cursor: pointer;">
+                💾 Mettre à jour
+            </button>
+            
+            <a href="{% url 'aller_a_mon_espace' %}" class="btn btn-secondary" style="padding: 10px 20px; font-size: 14px; font-weight: 600; text-decoration: none; background: #f1f5f9; color: #475569; border-radius: 8px; display: inline-flex; align-items: center; gap: 6px;">
+                🏠 Retourner à mon espace
+            </a>
+        </div>
+    </form>
 
-        <option value="rejete">
-          🚫  Réjété
-        </option>
-
-    </select>
-
-     <button type="submit" class="btn">
-        Mettre à jour
-    </button>
-    <a href="{% url 'aller_a_mon_espace' %}"class="btn " >📊 Retourner a mon espace</a>
-</form>
-
-
-
-
-
-
+</div>
 {% endblock %}

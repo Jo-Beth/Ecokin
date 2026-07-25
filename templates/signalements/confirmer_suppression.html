@@ -1,21 +1,50 @@
-{% extends 'base.html'%}
+{% extends 'base.html' %}
 
 {% block content %}
-<div class="card" style="max-width: 760px; margin: 0 auto;">
-    <h2>Supprimer le signalments</h2>
+<div class="card" style="max-width: 500px; margin: 30px auto; padding: 28px; background: #ffffff; border-radius: 12px; border: 1px solid #fee2e2; box-shadow: 0 4px 12px rgba(220, 38, 38, 0.08);">
 
-    <p> Voulez-vous vraiment supprimer ce signalements ?</p>
+    <!-- En-tête d'avertissement -->
+    <span class="pill" style="display: inline-flex; align-items: center; gap: 6px; background: #fee2e2; color: #991b1b; padding: 4px 12px; border-radius: 20px; font-size: 13px; font-weight: 600; margin-bottom: 12px;">
+        ⚠️ Action Irréversible
+    </span>
+    
+    <h2 style="font-weight: 800; font-size: 22px; color: #991b1b; margin: 0 0 10px 0;">
+        Supprimer le signalement
+    </h2>
 
-    <form method="POST">
-        {%  csrf_token %}
+    <p style="color: #475569; font-size: 14px; margin: 0 0 16px 0; line-height: 1.5;">
+        Êtes-vous sûr de vouloir supprimer définitivement ce signalement ?
+    </p>
 
-        <button type="submit" class="btn btn-secondary">Supprimer</button>
-        <a href="{% url 'detail_signalements' signalements.id %}" class="btn btn-secondary">Annuler</a>
-        
-            
+    <!-- Rappel du titre de l'élément à supprimer -->
+    {% if signalement %}
+        <div style="background: #fff5f5; border-left: 4px solid #ef4444; padding: 12px 16px; border-radius: 6px; margin-bottom: 24px;">
+            <strong style="color: #7f1d1d; font-size: 14px; display: block;">
+                📌 {{ signalement.titre }}
+            </strong>
+        </div>
+    {% endif %}
+
+    <!-- Formulaire de confirmation -->
+    <form method="POST" style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+        {% csrf_token %}
+
+        <!-- Bouton de suppression (Rouge) -->
+        <button type="submit" class="btn" style="padding: 10px 20px; font-size: 14px; font-weight: 600; background: #dc2626; color: #ffffff; border: none; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+            🗑️ Confirmer la suppression
+        </button>
+
+        <!-- Bouton d'annulation (Gris neutre) -->
+        {% if signalement %}
+            <a href="{% url 'detail_signalements' signalement.pk %}" class="btn btn-secondary" style="padding: 10px 18px; font-size: 14px; font-weight: 600; text-decoration: none; background: #f1f5f9; color: #475569; border-radius: 8px; display: inline-flex; align-items: center; gap: 6px;">
+                ↩️ Annuler
+            </a>
+        {% else %}
+            <a href="{% url 'liste' %}" class="btn btn-secondary" style="padding: 10px 18px; font-size: 14px; font-weight: 600; text-decoration: none; background: #f1f5f9; color: #475569; border-radius: 8px; display: inline-flex; align-items: center; gap: 6px;">
+                ↩️ Annuler
+            </a>
+        {% endif %}
     </form>
 
-    
 </div>
-
 {% endblock %}

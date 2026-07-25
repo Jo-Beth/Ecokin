@@ -1,69 +1,128 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="card" style="margin-bottom: 16px;">
-    <span class="pill">📚 Ressources collaboratives</span>
-    <h3>Ressources, guides, livres et publications</h3>
-    <p>Une bibliothèque partagée pour les autorités, ONG, écoles et entreprises engagées dans la transition environnementale.</p>
-    <div style="margin-top: 12px;">
-        <a href="{% url 'creer_article' %}" class="btn">Publier une ressource</a>
-        <a href="{% url 'gestion_ressources' %}" class="btn secondary">Gérer mes ressources</a>
-    </div>
-</div>
+<div style="max-width: 1000px; margin: 0 auto; padding-bottom: 40px;">
 
-<div class="card" style="margin-bottom: 16px;">
-    <form method="get" class="grid-2">
-        <div>
-            <label for="type_ressource">Type</label>
-            <select id="type_ressource" name="type_ressource" class="form-control">
-                <option value="">Tous</option>
-                <option value="guide" {% if type_ressource == 'guide' %}selected{% endif %}>Guide</option>
-                <option value="livre" {% if type_ressource == 'livre' %}selected{% endif %}>Livre</option>
-                <option value="publication" {% if type_ressource == 'publication' %}selected{% endif %}>Publication</option>
-                <option value="ressource" {% if type_ressource == 'ressource' %}selected{% endif %}>Ressource</option>
-            </select>
+    <!-- Carte En-tête / Hero -->
+    <div class="card" style="margin-bottom: 24px; padding: 24px; background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
+        <span class="pill" style="display: inline-flex; align-items: center; gap: 6px; background: #e0f2fe; color: #0369a1; padding: 4px 12px; border-radius: 20px; font-size: 13px; font-weight: 600; margin-bottom: 8px;">
+            📚 Ressources collaboratives
+        </span>
+        <h3 style="margin: 0 0 8px 0; font-size: 22px; font-weight: 800; color: #0f172a;">
+            Ressources, guides, livres et publications
+        </h3>
+        <p style="margin: 0 0 16px 0; color: #64748b; font-size: 14px; line-height: 1.5;">
+            Une bibliothèque partagée pour les autorités, ONG, écoles et entreprises engagées dans la transition.
+        </p>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <a href="{% url 'creer_article' %}" class="btn" style="padding: 9px 16px; font-size: 14px; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+                ➕ Publier une ressource
+            </a>
+            <a href="{% url 'gestion_ressources' %}" class="btn btn-secondary" style="padding: 9px 16px; font-size: 14px; font-weight: 600; text-decoration: none; background: #f1f5f9; color: #334155; border-radius: 8px; display: inline-flex; align-items: center; gap: 6px;">
+                ⚙️ Gérer mes ressources
+            </a>
         </div>
-        <div>
-            <label for="acteur">Acteur</label>
-            <select id="acteur" name="acteur" class="form-control">
-                <option value="">Tous</option>
-                <option value="autorite" {% if acteur == 'autorite' %}selected{% endif %}>Autorité</option>
-                <option value="ong" {% if acteur == 'ong' %}selected{% endif %}>ONG</option>
-                <option value="ecole" {% if acteur == 'ecole' %}selected{% endif %}>École</option>
-                <option value="entreprise" {% if acteur == 'entreprise' %}selected{% endif %}>Entreprise</option>
-            </select>
-        </div>
-        <div>
-            <label for="categorie">Catégorie</label>
-            <select id="categorie" name="categorie" class="form-control">
-                <option value="">Toutes</option>
-                {% for category in categories %}
-                <option value="{{ category.slug }}" {% if categorie == category.slug %}selected{% endif %}>{{ category.nom }}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <div style="grid-column: 1 / -1;">
-            <button type="submit" class="btn">Filtrer</button>
-        </div>
-    </form>
-</div>
+    </div>
 
-<div class="dashboard-grid">
-    {% for article in articles %}
-    <div class="card">
-        <span class="pill">{{ article.get_type_ressource_display }}</span>
-        <h3>{{ article.titre }}</h3>
-        <p>{{ article.sous_titre|default:'Ressource partagée sur Écokin' }}</p>
-        <p><strong>Acteur :</strong> {{ article.get_acteur_display }}</p>
-        <p><strong>Catégories :</strong> {% for category in article.categories.all %}{{ category.nom }}{% if not forloop.last %}, {% endif %}{% empty %}Aucune{% endfor %}</p>
-        <p><strong>Publié par :</strong> {{ article.auteur.username }}</p>
-        <p><strong>Date :</strong> {{ article.date_creation|date:'d/m/Y' }}</p>
-        <a href="{% url 'detail_article' article.pk %}" class="btn secondary">Consulter</a>
+    <!-- Carte Formulaire de Filtrage -->
+    <div class="card" style="margin-bottom: 24px; padding: 20px; background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
+        <form method="get" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; align-items: end;">
+            
+            <!-- Filtre : Type de ressource -->
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+                <label for="type_ressource" style="font-size: 13px; font-weight: 600; color: #475569;">Type de ressource</label>
+                <select id="type_ressource" name="type_ressource" class="form-control" style="padding: 8px 12px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 14px;">
+                    <option value="">Tous les types</option>
+                    <option value="guide" {% if type_ressource == 'guide' %}selected{% endif %}>Guide</option>
+                    <option value="livre" {% if type_ressource == 'livre' %}selected{% endif %}>Livre</option>
+                    <option value="publication" {% if type_ressource == 'publication' %}selected{% endif %}>Publication</option>
+                    <option value="ressource" {% if type_ressource == 'ressource' %}selected{% endif %}>Ressource</option>
+                </select>
+            </div>
+
+            <!-- Filtre : Acteur -->
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+                <label for="acteur" style="font-size: 13px; font-weight: 600; color: #475569;">Acteur</label>
+                <select id="acteur" name="acteur" class="form-control" style="padding: 8px 12px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 14px;">
+                    <option value="">Tous les acteurs</option>
+                    <option value="autorite" {% if acteur == 'autorite' %}selected{% endif %}>Autorité</option>
+                    <option value="ong" {% if acteur == 'ong' %}selected{% endif %}>ONG</option>
+                    <option value="ecole" {% if acteur == 'ecole' %}selected{% endif %}>École</option>
+                    <option value="entreprise" {% if acteur == 'entreprise' %}selected{% endif %}>Entreprise</option>
+                </select>
+            </div>
+
+            <!-- Filtre : Catégorie -->
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+                <label for="categorie" style="font-size: 13px; font-weight: 600; color: #475569;">Catégorie</label>
+                <select id="categorie" name="categorie" class="form-control" style="padding: 8px 12px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 14px;">
+                    <option value="">Toutes les catégories</option>
+                    {% for category in categories %}
+                        <option value="{{ category.slug }}" {% if categorie == category.slug %}selected{% endif %}>
+                            {{ category.nom }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Bouton de validation -->
+            <div>
+                <button type="submit" class="btn" style="width: 100%; padding: 9px; font-size: 14px; font-weight: 600; border: none; cursor: pointer;">
+                    🔍 Filtrer
+                </button>
+            </div>
+        </form>
     </div>
-    {% empty %}
-    <div class="card">
-        <p>Aucune ressource publiée pour le moment.</p>
+
+    <!-- Grille des articles / ressources -->
+    <div class="dashboard-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 18px;">
+        {% for article in articles %}
+            <div class="card" style="padding: 20px; background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
+                <div>
+                    <!-- Badge du type -->
+                    <span class="pill" style="display: inline-block; background: #f1f5f9; color: #334155; padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; margin-bottom: 10px;">
+                        📖 {{ article.get_type_ressource_display|default:article.type_ressource }}
+                    </span>
+
+                    <h3 style="margin: 0 0 6px 0; font-size: 17px; font-weight: 700; color: #0f172a; line-height: 1.3;">
+                        {{ article.titre }}
+                    </h3>
+
+                    <p style="color: #64748b; font-size: 13px; margin: 0 0 14px 0; line-height: 1.4;">
+                        {{ article.sous_titre|default:"Ressource partagée sur Écokin" }}
+                    </p>
+
+                    <!-- Métadonnées -->
+                    <div style="font-size: 13px; color: #475569; display: flex; flex-direction: column; gap: 4px; padding-top: 10px; border-top: 1px solid #f1f5f9;">
+                        <div><strong>Acteur :</strong> {{ article.get_acteur_display|default:article.acteur }}</div>
+                        <div>
+                            <strong>Catégories :</strong>
+                            {% for category in article.categories.all %}
+                                <span style="background: #e2e8f0; color: #334155; padding: 1px 6px; border-radius: 4px; font-size: 11px;">{{ category.nom }}</span>{% if not forloop.last %} {% endif %}
+                            {% empty %}
+                                <span style="color: #cbd5e1;">Non spécifiée</span>
+                            {% endfor %}
+                        </div>
+                        <div><strong>Publié par :</strong> {{ article.auteur.username|default:"Équipe" }}</div>
+                        <div><strong>Date :</strong> {{ article.date_creation|date:"d/m/Y" }}</div>
+                    </div>
+                </div>
+
+                <!-- Bouton d'action -->
+                <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #f1f5f9;">
+                    <a href="{% url 'detail_article' article.pk %}" class="btn btn-secondary" style="width: 100%; display: block; text-align: center; padding: 8px; font-size: 13px; font-weight: 600; text-decoration: none; background: #f8fafc; color: #0284c7; border-radius: 6px; border: 1px solid #e2e8f0;">
+                        📄 Consulter la ressource
+                    </a>
+                </div>
+            </div>
+        {% empty %}
+            <div class="card" style="grid-column: 1 / -1; padding: 32px; text-align: center; background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0;">
+                <p style="margin: 0; color: #94a3b8; font-size: 15px; font-weight: 500;">
+                    📂 Aucune ressource disponible pour le moment.
+                </p>
+            </div>
+        {% endfor %}
     </div>
-    {% endfor %}
+
 </div>
 {% endblock %}
