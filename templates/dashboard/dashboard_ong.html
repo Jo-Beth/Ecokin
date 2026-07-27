@@ -66,7 +66,7 @@
         <div class="metric-row" style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 1px solid #f1f5f9;">
             <span style="color: #64748b; font-size: 14px;">Date de création</span>
             <strong style="color: #1e293b; font-size: 14px; font-weight: 600;">
-                {{ request.user.date_joined|date:"d/m/Y" }}
+                {{ request.user.date_joined|date:"d/m/Y \à H:i:s" }}
             </strong>
         </div>
 
@@ -75,6 +75,21 @@
             <span style="background: #dcfce7; color: #166534; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">
                 🌍 {{ request.user.get_role_display|default:"ONG" }}
             </span>
+        </div>
+                <!-- Photo de profil -->
+        <div class="metric-row" style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="color: #64748b; font-size: 14px;">Photo de profil</span>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                {% if request.user.photo %}
+                    <img src="{{ request.user.photo.url }}"
+                         alt="photo de {{ request.user.username }}"
+                         style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid #dcfce7;">
+                {% else %}
+                    <img src="/media/profils/default.png"
+                         alt="photo par defaut"
+                         style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid #dcfce7;">
+                {% endif %}
+
         </div>
     </div>
 </div>

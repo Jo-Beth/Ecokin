@@ -78,6 +78,20 @@
                 🛡️ {{ request.user.get_role_display|default:"Autorité" }}
             </span>
         </div>
+        <div class="metric-row" style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="color: #64748b; font-size: 14px;">Photo de profil</span>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                {% if request.user.photo %}
+                    <img src="{{ request.user.photo.url }}"
+                         alt="photo de {{ request.user.username }}"
+                         style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid #dcfce7;">
+                {% else %}
+                    <img src="/media/profils/default.png"
+                         alt="photo par defaut"
+                         style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid #dcfce7;">
+                {% endif %}
+
+        </div>
     </div>
 </div>
 
