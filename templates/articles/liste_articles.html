@@ -104,7 +104,7 @@
                             {% endfor %}
                         </div>
                         <div><strong>Publié par :</strong> {{ article.auteur.username|default:"Équipe" }}</div>
-                        <div><strong>Date :</strong> {{ article.date_creation|date:"d/m/Y" }}</div>
+                        <div><strong>Date :</strong> {{ article.date_creation|date:"d/m/Y \à H:i:s" }}</div>
                     </div>
                 </div>
 

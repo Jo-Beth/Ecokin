@@ -11,13 +11,16 @@
             <div style="display: flex; align-items: center; gap: 10px;">
                 <span style="font-size: 24px;">🔔</span>
                 <h2 style="margin: 0; font-size: 22px; font-weight: 800; color: #0f172a;">
-                    Mes notifications
+                    Centre des mes notifications
                 </h2>
+                <small style="color #64748b;">Historique et détails de vos échanges et signalements</small>
             </div>
             {% if notifications %}
+
                 <span class="pill" style="background: #e0f2fe; color: #0369a1; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">
                     {{ notifications|length }} notification(s)
                 </span>
+                
             {% endif %}
         </div>
 
@@ -25,29 +28,63 @@
         {% if notifications %}
             <div style="display: flex; flex-direction: column; gap: 12px;">
                 {% for notification in notifications %}
-                    <div style="padding: 16px; background: {% if notification.est_lue or notification.is_read %}#f8fafc{% else %}#f0f9ff{% endif %}; border-radius: 8px; border-left: 4px solid {% if notification.est_lue or notification.is_read %}#cbd5e1{% else %}#0284c7{% endif %}; border-top: 1px solid #f1f5f9; border-right: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; transition: background 0.2s ease;">
+                    <div style="padding: 16px; background: {% if notification.lu %}#f8fafc{% else %}#f0f9ff{% endif %}; border-radius: 8px; border-left: 4px solid {% if notification.est_lue or notification.is_read %}#cbd5e1{% else %}#0284c7{% endif %}; border-top: 1px solid #f1f5f9; border-right: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; transition: background 0.2s ease;">
                         
                         <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 6px;">
-                            <p style="margin: 0; font-size: 14px; color: #1e293b; line-height: 1.5; font-weight: 500;">
-                                {{ notification.message }}
-                            </p>
-                            {% if not notification.est_lue and not notification.is_read %}
-                                <span style="background: #0284c7; color: #ffffff; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 10px; text-transform: uppercase;">
-                                    Nouveau
+                            <h3 style="margin: 0; font-size: 14px; color: #1e293b; line-height: 1.5; font-weight: 500;">
+                                {{ notification.titre|default:"Mise à jour sur votre signalement" }}
+                            </h3>
+                            
+                            {% if not notification.lu %}
+                                <span class="pill" style="background: #0284c7; color: #ffffff; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 10px; text-transform: uppercase;">
+                                    Non lue
+                                </span>
+                            {% else %}
+                                <span class="pill" style="background: #0284c7; color: #ffffff; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 10px; text-transform: uppercase;">
+                                    Lue
                                 </span>
                             {% endif %}
                         </div>
+                        <!-- Message complet / Description -->
+                        <p style="margin: 0 0 14px 0; font-size: 14px; color: #64748b; font-size: 14px; color: #334155; line-height: 1.6;">
+                            {{ notification.message }}
+                        </p>
 
+                        <div style="background: #f8fafc; padding: 12px; border-radius: 8px; margin-bottom: 12px; font-size: 13px; color: #475569; display: flex; flex-direction: colum; gap: 6px;">
+                            {% if notification.signalement %}
+                                <div>
+                                    <strong>📍signalements concernés :</strong> {{ notification.signalement.titre }}
+                                </div>
+                            {% endif %}
+                            <hr>
+                            {% if notification.expediteur  %}
+                                <div>
+                                    <strong>👤 A été traité par :</strong> {{ notification.expediteur.username }}
+                                </div>
+                            {% endif %}
+                            {% if notification.statut_traitement %}
+                                <div>
+                                    <strong>🔁 Etat du triatement :</strong>
+                                    <span style="color: #0369a1; font-weight: 600;">{{ notification.statut_traitement }}</span>
+                                </div>
+                            {% endif %}
+                        </div>
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
                             <small style="color: #94a3b8; font-size: 12px;">
-                                🕒 {{ notification.date_creation|date:"d/m/Y à H:i" }}
+                                {% if notification.date_creation %}
+                                🕒 {{ notification.date_creation|date:"d/m/Y \à H:i/s" }} à {{ notification.date_creation|date:"H:i:s" }}
+                                {% elif notification.created_at %}
+                                    {{ notification.created_at }} à {{ notification.created_at|date:"H:i:s" }}
+                                {% endif %}
                             </small>
 
-                            {% if notification.lien or notification.url %}
-                                <a href="{{ notification.lien|default:notification.url }}" style="color: #0284c7; font-size: 12px; font-weight: 600; text-decoration: none;">
-                                    Voir ➔
-                                </a>
-                            {% endif %}
+                                
+                            <a href="{% url 'lire_notification' notification.pk %}" style="color: #0284c7; font-size: 12px; font-weight: 600;">
+                                Voir le signalement ➔
+                            </a>
+                            <a href="{% url 'aller_a_mon_espace' %}" class="btn btn-secondary" style="padding: 10px 20px; font-size: 14px; font-weight: 600; text-decoration: none; background: #f1f5f9; color: #475569; border-radius: 8px;">
+                                Retour à mon espace
+                            </a>     
                         </div>
 
                     </div>

@@ -25,7 +25,8 @@ class Signalements(models.Model):
     latitude = models.DecimalField(max_digits= 9, decimal_places= 6)
     longitude = models.DecimalField(max_digits= 9, decimal_places= 6)
     statut = models.CharField(max_length=20, choices=STATUT_CHOICES, default='en_attente')
-    date_creation = models.DateField(auto_now_add= True)
+    date_creation = models.DateTimeField(auto_now_add= True)
+    analyse_ia = models.TextField(blank=True, null=True)
     utilisateur = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name = 'signalements')
     
     def __str__(self):

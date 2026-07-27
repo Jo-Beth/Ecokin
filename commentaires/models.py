@@ -12,6 +12,8 @@ class Commentaire(models.Model):
     date_creation = models.DateTimeField(auto_now_add=True)
     est_valide = models.BooleanField(default=True)
 
+    
+    
     class Meta:
         ordering = ['date_creation']
 

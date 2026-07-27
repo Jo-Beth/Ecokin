@@ -1,10 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
-{% with item=signalement|default:signalements %}
+{% with item=signalement %}
 <div class="card" style="max-width: 650px; margin: 30px auto; padding: 28px; background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
-
-    <!-- En-tête : Titre & Badge Statut -->
+    
     <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 16px; flex-wrap: wrap;">
         <div>
             <span class="pill" style="display: inline-flex; align-items: center; gap: 6px; background: #e0f2fe; color: #0369a1; padding: 4px 12px; border-radius: 20px; font-size: 13px; font-weight: 600; margin-bottom: 8px;">
@@ -13,6 +12,7 @@
             <h1 style="margin: 0; font-size: 22px; font-weight: 800; color: #0f172a;">
                 {{ item.titre }}
             </h1>
+            
         </div>
 
         <!-- Badges d'état colorés -->
@@ -38,7 +38,7 @@
     <!-- Informations de l'auteur & date -->
     <div style="display: flex; gap: 16px; color: #64748b; font-size: 13px; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid #f1f5f9;">
         <span>👤 <strong>Auteur :</strong> {{ item.utilisateur.username|default:"Anonyme" }}</span>
-        <span>📅 <strong>Publié le :</strong> {{ item.date_creation|date:"d/m/Y" }}</span>
+        <span>📅 <strong>Publié le :</strong> {{ item.date_creation|date:"d/m/Y \à H:i:s" }}</span>
     </div>
 
     <!-- Description -->
@@ -49,6 +49,7 @@
         <p style="color: #334155; font-size: 15px; line-height: 1.6; margin: 0; background: #f8fafc; padding: 14px; border-radius: 8px;">
             {{ item.description }}
         </p>
+        
     </div>
 
     <!-- Photo associée -->
@@ -80,9 +81,27 @@
                 </a>
             {% endif %}
 
-            <a href="{% url 'liste' %}" class="btn btn-secondary" style="padding: 8px 16px; font-size: 13px; font-weight: 600; text-decoration: none; background: #f1f5f9; color: #475569; border-radius: 6px; display: inline-flex; align-items: center; gap: 6px; margin-left: auto;">
-                ↩️ Retour à la liste
-            </a>
+            {% if venant_de_notif %}
+                
+                <a href="{% url 'notifications' %}" class="btn btn-secondary" style="padding: 9px 16px; font-size: 13px; font-weight: 600; text-decoration: none; background: #f1f5f9; color: #475569; border-radius: 8px; display: inline-flex; align-items: center; gap: 6px;">
+                    🏠 Retourner à ma page des notifications
+                </a>
+                
+            {% endif %}
+
+            {% if user.role == "citoyens" %}        
+                <a href="{% url 'liste' %}" class="btn btn-secondary" style="padding: 8px 16px; font-size: 13px; font-weight: 600; text-decoration: none; background: #f1f5f9; color: #475569; border-radius: 6px; display: inline-flex; align-items: center; gap: 6px; margin-left: auto;">
+                    ↩️ Retour à la liste
+                </a>
+            {% endif %}
+            
+            {% if user.role == "ong" %}        
+                <a href="{% url 'aller_a_mon_espace' %}" class="btn btn-secondary" style="padding: 8px 16px; font-size: 13px; font-weight: 600; text-decoration: none; background: #f1f5f9; color: #475569; border-radius: 6px; display: inline-flex; align-items: center; gap: 6px; margin-left: auto;">
+                    ↩️ Retourner à mon espace
+                </a>
+            {% endif %}
+
+
         </div>
 
         <!-- Actions Rapides de Changement de Statut (Gestionnaires / ONG) -->

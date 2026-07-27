@@ -4,7 +4,8 @@ from .forms import SignalementsForm
 from .models import Signalements
 from notifications.models import Notifications
 from .ai_utils import analyser_image
-
+from django.urls import reverse
+from django.contrib import messages
 # Create your views here.
 
 @login_required
@@ -20,10 +21,11 @@ def creer_signalements(request):
 
             signalement = form.save(commit=False)
             signalement.utilisateur = request.user
+            signalement.analyse_ia = prediction
+            messages.success(request, "signalement créé avec succès !")
             signalement.save()
-            form = SignalementsForm()
-            return render(request, 'signalements/creer_signalements.html', {'form': form, 'prediction': prediction, 'signalement_enregistre': True})
-        
+            
+            return redirect('liste')
     else:
         form  = SignalementsForm()
         
@@ -43,7 +45,16 @@ def detail_signalements(request,pk):
     signalements = get_object_or_404(Signalements, pk=pk)
     peut_modifier = request.user.peut_etre_modifier(signalements)
     peut_supprimer = request.user.peut_etre_supprimer(signalements)
-    return render(request, "signalements/detail_signalements.html", {"signalements": signalements, "peut_modifier": peut_modifier, "peut_supprimer": peut_supprimer })
+    venant_de_notif= request.GET.get('from') == 'notification'
+    
+    contexte = {
+        'signalement': signalements,
+        'item': signalements,
+        'peut_modifier': peut_modifier,
+        'peut_supprimer': peut_supprimer,
+        'venant_de_notif': venant_de_notif,
+    }
+    return render(request, "signalements/detail_signalements.html", contexte)
 @login_required
 def modifier_signalements(request, pk):
     signalements = get_object_or_404(Signalements, pk=pk)
@@ -70,23 +81,12 @@ def supprimer_signalements(request, pk):
     if request.method == "POST":
         signalements.delete()
     return render(request,"signalements/confirmer_suppression.html", {"signalements": signalements})
-@login_required
-def changer_statut(request, pk, nouveau_statut):
-    signalements = get_object_or_404(Signalements, pk=pk)
-    
-    if request.method == "POST":
-        nouveau_statut=request.POST.get("statut")
-        signalements.statut = nouveau_statut
-        signalements.save()
-        Notifications.objects.create(utilisateur=signalements.utilisareur, message=f"Votre signalements'{signalements.titre}' a été mis à jourss" )
-    
-    return redirect("liste_autorite")
-    
+
 @login_required
 def traiter_signalement(request, pk):
     if request.user.role != "autorités":
         
-        return redirect("dashboard")
+        return redirect("accueil")
     
     signalements = get_object_or_404(Signalements, pk=pk)
     
@@ -94,9 +94,9 @@ def traiter_signalement(request, pk):
         nouveau_statut = request.POST.get("statut")
         signalements.statut = nouveau_statut
         signalements.save()
-        Notifications.objects.create(utilisateur=signalements.utilisateur, message=f"le statut de votre signalement '{signalements.titre}' a été mis à jours :{signalements.get_statut_display()}.", lu=False)
-        
-        return redirect("dashboard")
+        Notifications.objects.create(utilisateur=signalements.utilisateur, expediteur=request.user, signalement=signalements, titre="Statut du signalement mis à jours", message="Un changement à été fait sur votre signalement." )
+            
+        return redirect("liste_autorite")
     return render(request,"signalements/traiter.html", {"signalement": signalements})
            
 @login_required                

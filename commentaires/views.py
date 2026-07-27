@@ -31,3 +31,4 @@ def espace_collaboration_views(request):
     }
     
     return render(request, 'commentaires/espace_collaboration.html', contexte)
+

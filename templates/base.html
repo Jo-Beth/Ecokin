@@ -330,14 +330,22 @@
                     <a class="brand" href="/">Écokin</a>
                     <div class="sidebar-nav">
                         <a href="{% url 'accueil' %}">🏠 Accueil</a>
+                        {% if user.role == 'citoyens'%}
                         <a href="{% url 'creer' %}">📍 Signaler un problème</a>
                         <a href="{% url 'liste' %}">🧾 Mes signalements</a>
+                        {% endif %}
                         <a href="{% url 'carte_signalements' %}">🗺️ Carte des signalements</a>
-                        <a href="{% url 'liste_articles' %}">📚 Ressources</a>
+                        <a href="{% url 'liste_articles' %}">📚 Contenu éducatif</a>
+                        {% if user.role == 'ong'%}
                         <a href="{% url 'espace_collaboration' %}">🤝 Collaborer</a>
+                        {% endif %}
+                        <a href="{% url 'notifications'%}"> 🔔 Notifications</a>
+                        {% if user.role == 'autorités'%}
+                        <a href="{% url 'gestion_ressources' %}">🛠️ Gestion des ressources</a>
+                        {% endif %}
                         {% if user.is_authenticated %}
-                            <a href="{% url 'gestion_ressources' %}">🛠️ Gestion des ressources</a>
-                            <a href="{% url 'dashboard' %}">📊 Tableau de bord</a>
+                            
+                            <a href="{% url 'dashboard' %}">📊 Mon espace </a>
                         {% endif %}
                     </div>
                 </aside>

@@ -9,6 +9,6 @@ urlpatterns = [
     path('traiter/<int:pk>', views.traiter_signalement, name='traiter'),
     path('<int:pk>/modifier/', views.modifier_signalements, name='modifier_signalements'),
     path('<int:pk>/supprimer/', views.supprimer_signalements, name='supprimer_signalements'),
-    path('changer-statut/<int:pk>', views.changer_statut, name='changer_statut'),
+    
     path('carte/', views.carte_signalements, name='carte_signalements'),
 ]

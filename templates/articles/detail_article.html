@@ -80,7 +80,7 @@
                 <div class="notice" style="padding: 14px 18px; background: #f8fafc; border-radius: 8px; border-left: 4px solid #0284c7;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
                         <strong style="font-size: 14px; color: #0f172a;">👤 {{ commentaire.auteur.username }}</strong>
-                        <small style="color: #94a3b8; font-size: 12px;">{{ commentaire.date_creation|date:"d/m/Y à H:i" }}</small>
+                        <small style="color: #94a3b8; font-size: 12px;">{{ commentaire.date_creation|date:"d/m/Y \à H:i:s" }}</small>
                     </div>
                     <p style="margin: 0; font-size: 14px; color: #334155; line-height: 1.5;">
                         {{ commentaire.contenu }}

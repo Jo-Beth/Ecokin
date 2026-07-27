@@ -70,7 +70,7 @@
         <div class="metric-row" style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 1px solid #f1f5f9;">
             <span style="color: #64748b; font-size: 14px;">Membre depuis</span>
             <strong style="color: #1e293b; font-size: 14px; font-weight: 600;">
-                {{ request.user.date_joined|date:"d F Y"|default:request.user.date_joined }}
+                {{ request.user.date_joined|date:"d F Y \à H:i:s"|default:request.user.date_joined }}
             </strong>
         </div>
 
